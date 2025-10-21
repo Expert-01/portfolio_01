@@ -13,7 +13,7 @@ const projects = [
 {  title: 'Crypto Investment Site',
   description: 'A secure broker platform built with Node.js, PostgreSQL, and Express.',
   image: 'path/to/crypto-investment-site.jpg',
-  live: 'https://crypto-investment-site.com',
+  live: 'https://www.nexa-exchange.com',
   github: 'https://github.com/yourusername/crypto-investment-site'
 },
 {  title: 'Campus Buddy',
