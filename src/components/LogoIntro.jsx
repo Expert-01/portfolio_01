@@ -5,32 +5,34 @@ export default function LogoIntro({ onComplete }) {
   const [phase, setPhase] = useState(0);
 
   useEffect(() => {
-    if (phase === 7 && onComplete) onComplete();
+    if (phase === 6 && onComplete) onComplete();
   }, [phase, onComplete]);
 
   useEffect(() => {
     const timers = [
-      setTimeout(() => setPhase(1), 1500),  // Draw G
-      setTimeout(() => setPhase(2), 3000),  // G undraws to dot
-      setTimeout(() => setPhase(3), 4000),  // Dot expands to beam
-      setTimeout(() => setPhase(4), 6000),  // Rotate beam
-      setTimeout(() => setPhase(5), 8500),  // Beam drops down
-      setTimeout(() => setPhase(6), 10500), // Push curtain up
-      setTimeout(() => setPhase(7), 13000), // End animation
+      setTimeout(() => setPhase(1), 1500), // Draw G
+      setTimeout(() => setPhase(2), 3000), // Undraw to dot
+      setTimeout(() => setPhase(3), 4000), // Expand to beam
+      setTimeout(() => setPhase(4), 6000), // Rotate beam
+      setTimeout(() => setPhase(5), 8500), // Slide beam down
+      setTimeout(() => setPhase(6), 11000), // Curtain reveal
     ];
     return () => timers.forEach(clearTimeout);
   }, []);
 
   return (
     <AnimatePresence>
-      {phase < 8 && (
+      {phase < 7 && (
         <motion.div
           className="fixed inset-0 z-[9999] flex items-center justify-center bg-black overflow-hidden"
+          initial={{ y: 0 }}
+          animate={phase === 6 ? { y: "-100%" } : {}}
+          transition={{ duration: 2.2, ease: "easeInOut" }}
         >
-          {/* Glassmorph backdrop */}
+          {/* Frosted background overlay */}
           <div className="absolute inset-0 bg-black/40 backdrop-blur-[20px]" />
 
-          {/* PHASE 1–2: Glowing 'G' draws and undraws to dot */}
+          {/* === 1 & 2. Glowing G draw + undraw to dot === */}
           {phase <= 2 && (
             <motion.svg
               width="180"
@@ -48,91 +50,80 @@ export default function LogoIntro({ onComplete }) {
                 initial={{ pathLength: 0 }}
                 animate={{
                   pathLength: phase === 1 ? 1 : 0,
-                  opacity: phase === 2 ? 0.7 : 1,
+                  opacity: 1,
                 }}
                 transition={{ duration: 1.5, ease: "easeInOut" }}
-                style={{ filter: "drop-shadow(0 0 10px #00aaff)" }}
+                style={{ filter: "drop-shadow(0 0 8px #00aaff)" }}
               />
-              {/* Central dot that appears as G undraws */}
+
+              {/* Last blue dot appears as “G” undraws */}
               {phase === 2 && (
                 <motion.circle
-                  cx="60"
-                  cy="60"
-                  r="3"
+                  cx="70"
+                  cy="75"
+                  r="4"
                   fill="#00aaff"
+                  style={{
+                    filter: "drop-shadow(0 0 12px #00aaff)",
+                  }}
                   initial={{ scale: 0 }}
-                  animate={{
-                    scale: [1, 1.5, 1.2],
-                    opacity: [1, 0.8, 1],
-                  }}
-                  transition={{
-                    duration: 1.2,
-                    repeat: Infinity,
-                    repeatType: "mirror",
-                  }}
-                  style={{ filter: "drop-shadow(0 0 15px #00aaff)" }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
                 />
               )}
             </motion.svg>
           )}
 
-          {/* PHASE 3–5: Beam expands, rotates, and drops */}
+          {/* === 3–5. Beam growth, rotation, slide === */}
           {phase >= 3 && phase <= 5 && (
             <motion.div
-              className="absolute bg-[#00aaff] rounded-full"
-              style={{
-                boxShadow:
-                  phase === 5
-                    ? "0 0 60px 25px #00aaff"
-                    : "0 0 25px 10px #00aaff",
+              className="absolute bg-[#00aaff] shadow-[0_0_25px_#00aaff]"
+              initial={{
+                width: "4px",
+                height: "0vh",
+                y: 0,
+                rotate: 0,
               }}
-              initial={{ width: 4, height: 0, rotate: 0, y: 0 }}
               animate={
                 phase === 3
                   ? {
-                      height: "100vh", // expand upward & downward from center
-                      transition: { duration: 1.8, ease: "easeInOut" },
+                      height: "100vh", // grows from dot to full vertical beam
+                      transition: { duration: 1.6, ease: "easeInOut" },
                     }
                   : phase === 4
                   ? {
                       rotate: 90,
-                      transition: { duration: 2.5, ease: "easeInOut" },
+                      transition: { duration: 2, ease: "easeInOut" },
                     }
                   : phase === 5
                   ? {
                       rotate: 90,
-                      y: "100vh", // beam drops completely off-screen
+                      y: "70vh", // slides downward and offscreen
                       transition: { duration: 2, ease: "easeInOut" },
                     }
                   : {}
               }
+              style={{
+                width: "4px",
+                height: "100vh",
+                borderRadius: "9999px",
+              }}
             />
           )}
 
-          {/* PHASE 6: Curtain slowly lifts up */}
-          {phase === 6 && (
+          {/* Subtle glow aura behind beam */}
+          {phase >= 3 && phase <= 5 && (
             <motion.div
-              className="absolute inset-0 bg-black"
-              initial={{ y: 0 }}
-              animate={{ y: "-100%" }}
-              transition={{ duration: 2.5, ease: "easeInOut" }}
+              className="absolute w-40 h-40 rounded-full bg-[#00aaff]/30 blur-3xl"
+              initial={{ scale: 0.8, opacity: 0.3 }}
+              animate={{ scale: [0.9, 1.2, 1], opacity: [0.4, 0.6, 0.3] }}
+              transition={{
+                duration: 1.8,
+                repeat: Infinity,
+                repeatType: "mirror",
+              }}
             />
           )}
-
-          {/* Background glow pulse (for energy effect) */}
-          <motion.div
-            className="absolute w-52 h-52 rounded-full bg-[#00aaff]/25 blur-3xl"
-            initial={{ scale: 0.8, opacity: 0.4 }}
-            animate={{
-              scale: [0.8, 1.3, 1],
-              opacity: [0.3, 0.7, 0.4],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              repeatType: "mirror",
-            }}
-          />
         </motion.div>
       )}
     </AnimatePresence>
