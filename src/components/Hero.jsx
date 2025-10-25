@@ -50,7 +50,7 @@ export default function Hero() {
             initial={{ y: -50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 1 }}
-            className="text-4xl md:text-6xl font-orbitron font-bold"
+            className="text-4xl md:text-6xl font-azonix font-bold"
             style={{ transform: `scale(${scale})` }}
           >
             Hi, I’m Gideon
