@@ -1,35 +1,38 @@
 import React, { useEffect, useState } from "react";
 
 const LogoIntro = ({ onComplete }) => {
-  const [reveal, setReveal] = useState(false);
+  const [revealCurtain, setRevealCurtain] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setReveal(true);
-      // Trigger main content after reveal finishes
-      setTimeout(() => {
-        if (onComplete) onComplete();
-      }, 1500);
-    }, 3000); // Cube spins for 3s
-    return () => clearTimeout(timer);
+    // Let the cube spin for 3 seconds before the curtain starts going up
+    const timer1 = setTimeout(() => {
+      setRevealCurtain(true);
+    }, 3000);
+
+    // Wait for curtain animation to finish before showing the site
+    const timer2 = setTimeout(() => {
+      if (onComplete) onComplete();
+    }, 4500); // 1.5s after curtain starts moving
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
   }, [onComplete]);
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-black flex items-center justify-center">
-      {/* Curtain Reveal */}
+      {/* CURTAIN OVERLAY */}
       <div
-        className={`absolute inset-0 bg-[#031531] z-20 transform transition-transform duration-[1500ms] ease-in-out ${
-          reveal ? "-translate-y-full" : "translate-y-0"
+        className={`absolute inset-0 bg-gradient-to-b from-[#010a18] to-[#031531] transition-transform duration-[1500ms] ease-in-out ${
+          revealCurtain ? "-translate-y-full" : "translate-y-0"
         }`}
       />
 
-      {/* Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#010a18] to-[#031531]" />
-
-      {/* 3D Liquid Glass Cube */}
+      {/* 3D LIQUID GLASS CUBE */}
       <div
-        className={`relative w-16 h-16 transition-opacity duration-1000 ${
-          reveal ? "opacity-0" : "opacity-100"
+        className={`relative w-16 h-16 transition-opacity duration-700 ${
+          revealCurtain ? "opacity-0" : "opacity-100"
         }`}
         style={{
           transformStyle: "preserve-3d",
@@ -61,7 +64,7 @@ const LogoIntro = ({ onComplete }) => {
         ))}
       </div>
 
-      {/* Keyframes */}
+      {/* Cube Animation Keyframes */}
       <style>{`
         @keyframes spinCube {
           0% { transform: rotateX(0deg) rotateY(0deg); }
