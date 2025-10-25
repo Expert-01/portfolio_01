@@ -19,11 +19,6 @@ const skills = [
 export default function About() {
   const { scrollY } = useViewportScroll();
 
-  // Calculate transform for each skill to create a “pause” effect
-  const transforms = skills.map((_, idx) => 
-    useTransform(scrollY, [idx * 300, idx * 300 + 200], [0, -50])
-  );
-
   return (
     <section
       className="relative py-32 px-6 md:px-12 text-gray-400 overflow-hidden flex flex-col md:flex-row items-start justify-between"
@@ -34,7 +29,7 @@ export default function About() {
       }}
     >
       {/* Left side: Title + Paragraphs */}
-      <div className="flex-1 space-y-20">
+      <div className="flex-1 space-y-32">
         <motion.h2
           initial={{ y: 50, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
@@ -45,18 +40,25 @@ export default function About() {
           About Me
         </motion.h2>
 
-        {skills.map((skill, idx) => (
-          <motion.div
-            key={idx}
-            style={{ y: transforms[idx] }}
-            className="mb-12"
-          >
-            <h3 className="text-2xl md:text-3xl font-semibold text-cyan-400 mb-2">{skill.name}</h3>
-            <p className="text-lg md:text-xl leading-relaxed font-sans">
-              {skill.description}
-            </p>
-          </motion.div>
-        ))}
+        {skills.map((skill, idx) => {
+          // Each skill “sticks” for 300px of scroll
+          const start = idx * 300;
+          const end = start + 300;
+          const yTransform = useTransform(scrollY, [start, end], [0, 0]); // y stays 0 = sticky effect
+
+          return (
+            <motion.div
+              key={idx}
+              style={{ y: yTransform }}
+              className="mb-12 sticky top-32"
+            >
+              <h3 className="text-2xl md:text-3xl font-orbitron font-semibold text-cyan-400 mb-2">{skill.name}</h3>
+              <p className="text-lg md:text-xl leading-relaxed font-sans">
+                {skill.description}
+              </p>
+            </motion.div>
+          );
+        })}
       </div>
 
       {/* Right side: 3D futuristic cubes (desktop only) */}
