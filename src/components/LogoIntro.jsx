@@ -2,21 +2,21 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 
 export default function LogoIntro({ onComplete }) {
-  const [phase, setPhase] = useState(0); // 0=draw G, 1=reverse line, 2=rotate, 3=curtain reveal
+  const [phase, setPhase] = useState(0); // 0=draw G, 1=line form, 2=rotate, 3=reveal
   const [show, setShow] = useState(true);
 
   useEffect(() => {
-    let timers = [];
+    const timers = [];
 
-    // Phase timing sequence
-    timers.push(setTimeout(() => setPhase(1), 1500)); // reverse stroke after G draw
-    timers.push(setTimeout(() => setPhase(2), 2000)); // rotate line
-    timers.push(setTimeout(() => setPhase(3), 2500)); // curtain reveal
+    // Sequential timing
+    timers.push(setTimeout(() => setPhase(1), 1600)); // G → vertical line
+    timers.push(setTimeout(() => setPhase(2), 2200)); // rotate across
+    timers.push(setTimeout(() => setPhase(3), 3000)); // curtain reveal
     timers.push(
       setTimeout(() => {
         setShow(false);
         if (onComplete) onComplete();
-      }, 3200)
+      }, 3700)
     );
 
     return () => timers.forEach(clearTimeout);
@@ -34,11 +34,11 @@ export default function LogoIntro({ onComplete }) {
             transition: { duration: 0.7, ease: "easeInOut" },
           }}
         >
-          {/* Glassmorph backdrop */}
+          {/* Frosted glass backdrop */}
           <div className="absolute inset-0 bg-black/40 backdrop-blur-[20px]" />
 
-          {/* Glowing dot stroke forming G */}
-          {phase < 1 && (
+          {/* PHASE 0: Glowing 'G' drawing */}
+          {phase === 0 && (
             <motion.svg
               width="160"
               height="160"
@@ -52,51 +52,59 @@ export default function LogoIntro({ onComplete }) {
                 stroke="#00aaff"
                 strokeWidth="6"
                 strokeLinecap="round"
-                initial={{ pathLength: 0 }}
+                initial={{ pathLength: 0, opacity: 1 }}
                 animate={{ pathLength: 1 }}
                 transition={{ duration: 1.5, ease: "easeInOutCubic" }}
                 style={{
-                  filter: "drop-shadow(0 0 8px #00aaff)",
+                  filter: "drop-shadow(0 0 10px #00aaff)",
                 }}
               />
             </motion.svg>
           )}
 
-          {/* Glowing vertical → horizontal line transition */}
+          {/* PHASE 1–2: Transform into glowing beam */}
           {phase >= 1 && phase < 3 && (
             <motion.div
-              className="absolute bg-[#00aaff]/90 rounded-full shadow-[0_0_30px_#00aaff]"
+              className="absolute bg-gradient-to-b from-[#00aaff] to-[#0077ff] rounded-full shadow-[0_0_40px_#00aaff]"
               initial={{
                 width: "4px",
-                height: "100vh",
+                height: "0vh",
                 rotate: 0,
+                opacity: 1,
               }}
               animate={{
-                rotate: phase === 2 ? 90 : 0,
+                height: phase === 1 ? "100vh" : "4px",
                 width: phase === 2 ? "100vw" : "4px",
-                height: phase === 2 ? "4px" : "100vh",
+                rotate: phase === 2 ? 90 : 0,
+                opacity: phase === 2 ? 0.9 : 1,
               }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
+              transition={{
+                duration: phase === 1 ? 0.6 : 1.2,
+                ease: "easeInOut",
+              }}
             />
           )}
 
-          {/* Curtain reveal — slide the black bg up */}
+          {/* PHASE 3: Curtain reveal — pulls up */}
           {phase === 3 && (
             <motion.div
               className="absolute inset-0 bg-black"
               initial={{ y: 0 }}
               animate={{ y: "-100%" }}
-              transition={{ duration: 0.7, ease: "easeInOut" }}
+              transition={{ duration: 0.8, ease: "easeInOut" }}
             />
           )}
 
-          {/* Glow pulse ring for atmosphere */}
+          {/* Soft fading glow behind everything */}
           <motion.div
-            className="absolute w-40 h-40 rounded-full bg-[#00aaff]/20 blur-3xl"
-            initial={{ scale: 0 }}
-            animate={{ scale: [0.8, 1.2, 1], opacity: [0.4, 0.6, 0] }}
+            className="absolute w-52 h-52 rounded-full bg-[#00aaff]/25 blur-3xl"
+            initial={{ scale: 0, opacity: 0.3 }}
+            animate={{
+              scale: [0.8, 1.3, 1],
+              opacity: [0.3, 0.6, 0],
+            }}
             transition={{
-              duration: 1.5,
+              duration: 1.8,
               repeat: Infinity,
               repeatType: "mirror",
             }}
