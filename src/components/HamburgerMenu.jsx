@@ -6,7 +6,7 @@ export default function HamburgerMenu({ isOpen, toggleMenu }) {
       onClick={toggleMenu}
       aria-label="Toggle Menu"
       aria-expanded={isOpen}
-      className="relative w-10 h-10 flex flex-col justify-center items-center focus:outline-none"
+      className="relative w-8 h-8 flex flex-col justify-center items-center focus:outline-none"
       whileTap={{ scale: 0.9 }}
     >
       {/* Glowing pulse ring */}
@@ -16,7 +16,7 @@ export default function HamburgerMenu({ isOpen, toggleMenu }) {
           animate={{ scale: 1.3, opacity: 0.4 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute w-12 h-12 rounded-full bg-blue-500/30 blur-md"
+          className="absolute w-10 h-10 rounded-full bg-blue-500/30 blur-md"
         />
       )}
 
@@ -24,11 +24,11 @@ export default function HamburgerMenu({ isOpen, toggleMenu }) {
       <motion.span
         animate={{
           rotate: isOpen ? 45 : 0,
-          y: isOpen ? 7 : -6,
+          y: isOpen ? 6 : -5,
           width: isOpen ? "100%" : "100%",
         }}
         transition={{ duration: 0.3 }}
-        className="block h-[3px] w-full bg-gradient-to-r from-blue-400 to-cyan-300 rounded"
+        className="block h-[2.5px] w-full bg-gradient-to-r from-blue-400 to-cyan-300 rounded"
       ></motion.span>
 
       {/* Middle bar */}
@@ -37,18 +37,18 @@ export default function HamburgerMenu({ isOpen, toggleMenu }) {
           opacity: isOpen ? 0 : 1,
         }}
         transition={{ duration: 0.2 }}
-        className="block h-[3px] w-full bg-gradient-to-r from-blue-400 to-cyan-300 rounded my-[4px]"
+        className="block h-[2.5px] w-full bg-gradient-to-r from-blue-400 to-cyan-300 rounded my-[3px]"
       ></motion.span>
 
       {/* Bottom bar */}
       <motion.span
         animate={{
           rotate: isOpen ? -45 : 0,
-          y: isOpen ? -7 : 6,
+          y: isOpen ? -6 : 5,
           width: isOpen ? "100%" : "70%",
         }}
         transition={{ duration: 0.3 }}
-        className="block h-[3px] bg-gradient-to-r from-blue-400 to-cyan-300 rounded"
+        className="block h-[2.5px] bg-gradient-to-r from-blue-400 to-cyan-300 rounded"
       ></motion.span>
     </motion.button>
   );
