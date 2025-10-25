@@ -30,36 +30,36 @@ const LogoIntro = ({ onComplete }) => {
 
       {/* 3D Liquid Glass Cube */}
       <div
-        className={`relative w-24 h-24 transition-opacity duration-1000 ${
+        className={`relative w-16 h-16 transition-opacity duration-1000 ${
           showContent ? "opacity-0" : "opacity-100"
         }`}
         style={{
           transformStyle: "preserve-3d",
-          animation: "spinCube 6s linear infinite",
+          animation: "spinCube 6s linear infinite, floatUpDown 4s ease-in-out infinite",
         }}
       >
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
-            className="absolute w-24 h-24 rounded-2xl backdrop-blur-[10px]"
+            className="absolute w-16 h-16 rounded-2xl backdrop-blur-[12px]"
             style={{
               background:
                 "linear-gradient(135deg, rgba(0,191,255,0.25), rgba(0,102,255,0.15))",
-              border: "1px solid rgba(0,191,255,0.2)",
+              border: "1px solid rgba(0,191,255,0.25)",
               boxShadow:
-                "inset 0 0 25px rgba(0,191,255,0.3), 0 0 30px rgba(0,191,255,0.3)",
+                "inset 0 0 25px rgba(0,191,255,0.4), 0 0 30px rgba(0,191,255,0.25)",
               transform: [
-                "translateZ(3rem)", // front
-                "rotateY(180deg) translateZ(3rem)", // back
-                "rotateY(90deg) translateZ(3rem)", // right
-                "rotateY(-90deg) translateZ(3rem)", // left
-                "rotateX(90deg) translateZ(3rem)", // top
-                "rotateX(-90deg) translateZ(3rem)", // bottom
+                "translateZ(2.5rem)", // front
+                "rotateY(180deg) translateZ(2.5rem)", // back
+                "rotateY(90deg) translateZ(2.5rem)", // right
+                "rotateY(-90deg) translateZ(2.5rem)", // left
+                "rotateX(90deg) translateZ(2.5rem)", // top
+                "rotateX(-90deg) translateZ(2.5rem)", // bottom
               ][i],
             }}
           >
             {/* Inner shimmer effect */}
-            <div className="absolute inset-0 bg-gradient-to-br from-transparent via-[#00bfff22] to-transparent blur-sm animate-pulse"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-transparent via-[#00bfff33] to-transparent blur-md animate-pulse"></div>
           </div>
         ))}
       </div>
@@ -67,12 +67,13 @@ const LogoIntro = ({ onComplete }) => {
       {/* Keyframes */}
       <style>{`
         @keyframes spinCube {
-          0% {
-            transform: rotateX(0deg) rotateY(0deg);
-          }
-          100% {
-            transform: rotateX(360deg) rotateY(360deg);
-          }
+          0% { transform: rotateX(0deg) rotateY(0deg); }
+          100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        @keyframes floatUpDown {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
         }
       `}</style>
     </div>
