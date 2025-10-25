@@ -1,51 +1,56 @@
 
-import DecryptedText from './DecryptedText';
-
-{/* Example 1: Defaults (hover to decrypt) */}
-<DecryptedText text="Hover me!" />
-
-{/* Example 2: Customized speed and characters */}
-<DecryptedText
-text="Customize me"
-speed={100}
-maxIterations={20}
-characters="ABCD1234!?"
-className="revealed"
-parentClassName="all-letters"
-encryptedClassName="encrypted"
-/>
-
-{/* Example 3: Animate on view (runs once) */}
-<div style={{ marginTop: '4rem' }}>
-<DecryptedText
-  text="This text animates when in view"
-  animateOn="view"
-  revealDirection="center"
-/>
-</div>
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { motion } from 'framer-motion';
 import { Parallax } from 'react-scroll-parallax';
+import DecryptedText from './DecryptedText';
 
 export default function About() {
   return (
-    <section className="dark:bg-gradient-to-b from-[#000000] to-[#0f172b]  py-20 px-6 text-center text-gray-800 dark:text-white rounded-3xl">
-      <h2 className="text-3xl font-bold mb-6">
+    <section
+      className="relative py-20 px-6 text-center text-gray-300 rounded-3xl overflow-hidden"
+      style={{
+        background: "linear-gradient(180deg, #0a0a23, #031531)",
+        backgroundSize: "400% 400%",
+        animation: "gradientShift 25s ease infinite"
+      }}
+    >
+      {/* Optional abstract shape / 3D visual */}
+      <div className="absolute top-0 right-0 -z-10 w-60 h-60 bg-cyan-500 rounded-full opacity-10 animate-pulse hidden md:block"></div>
+
+      {/* Title */}
+      <h2 className="text-3xl md:text-4xl font-bold mb-10">
         <DecryptedText
-text="About Me"
-speed={70}
-maxIterations={20}
-characters="AboutMeAboutMeAboutMeAboutMe!@#$%^&*"
-className="revealed "
-parentClassName="all-letters"
-encryptedClassName="encrypted"
-animateOn='view'
+          text="About Me"
+          speed={70}
+          maxIterations={20}
+          characters="AboutMe!@#$%^&*"
+          className="revealed"
+          parentClassName="all-letters"
+          encryptedClassName="encrypted"
+          animateOn="view"
         />
-        </h2>
-      <p className="max-w-2xl mx-auto text-lg">
-        I'm a Full-Stack Developer passionate about building efficient, scalable, and beautiful digital solutions.
-        With a strong foundation in JavaScript, React, Node.js, and PostgreSQL, I enjoy solving real-world problems and constantly learning new tech.
-      </p>
+      </h2>
+
+      {/* Paragraph */}
+      <motion.p
+        initial={{ y: 30, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1 }}
+        className="max-w-2xl mx-auto text-lg md:text-xl leading-relaxed"
+      >
+        I'm a <span className="text-cyan-400 font-semibold">Full-Stack Developer</span> passionate about building efficient, scalable, and beautiful digital solutions.
+        With a strong foundation in <span className="text-cyan-400 font-semibold">JavaScript, React, Node.js, PostgreSQL</span>, I enjoy solving real-world problems and constantly learning new tech.
+      </motion.p>
+
+      {/* Gradient animation keyframes */}
+      <style>{`
+        @keyframes gradientShift {
+          0% { background-position:0% 50%; }
+          50% { background-position:100% 50%; }
+          100% { background-position:0% 50%; }
+        }
+      `}</style>
     </section>
   );
 }
