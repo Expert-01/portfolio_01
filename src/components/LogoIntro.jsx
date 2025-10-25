@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 
 const LogoIntro = ({ onComplete }) => {
-  const [showContent, setShowContent] = useState(false);
+  const [reveal, setReveal] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setShowContent(true);
-      // Trigger onComplete slightly after reveal
+      setReveal(true);
+      // Trigger main content after reveal finishes
       setTimeout(() => {
         if (onComplete) onComplete();
       }, 1500);
@@ -16,22 +16,20 @@ const LogoIntro = ({ onComplete }) => {
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-black flex items-center justify-center">
-      {/* Circular Reveal */}
+      {/* Curtain Reveal */}
       <div
-        className={`absolute inset-0 flex items-center justify-center transition-all duration-[1500ms] ease-in-out ${
-          showContent ? "scale-[40] opacity-0" : "scale-0 opacity-100"
+        className={`absolute inset-0 bg-[#031531] z-20 transform transition-transform duration-[1500ms] ease-in-out ${
+          reveal ? "-translate-y-full" : "translate-y-0"
         }`}
-      >
-        <div className="w-10 h-10 bg-[#0af] rounded-full shadow-[0_0_60px_#00bfff]" />
-      </div>
+      />
 
       {/* Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#010a18] to-[#031531]" />
 
-      {/* 3D Liquid Glass Cube (Tinier Version) */}
+      {/* 3D Liquid Glass Cube */}
       <div
         className={`relative w-16 h-16 transition-opacity duration-1000 ${
-          showContent ? "opacity-0" : "opacity-100"
+          reveal ? "opacity-0" : "opacity-100"
         }`}
         style={{
           transformStyle: "preserve-3d",
@@ -58,7 +56,6 @@ const LogoIntro = ({ onComplete }) => {
               ][i],
             }}
           >
-            {/* Inner shimmer effect */}
             <div className="absolute inset-0 bg-gradient-to-br from-transparent via-[#00bfff22] to-transparent blur-[1px] animate-pulse" />
           </div>
         ))}
