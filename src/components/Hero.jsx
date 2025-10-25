@@ -3,8 +3,6 @@ import { motion } from "framer-motion";
 import { Typewriter } from "react-simple-typewriter";
 import { Parallax } from "react-scroll-parallax";
 import RippleGrid from './RippleGrid';
-import Particles from "react-tsparticles";
-import { loadFull } from "tsparticles";
 
 export default function Hero() {
   const [scrollY, setScrollY] = useState(0);
@@ -15,73 +13,33 @@ export default function Hero() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const opacity = scrollY < 150 ? 1 : Math.max(1 - (scrollY - 150) / 300, 0);
+  const opacity = Math.max(1 - scrollY / 300, 0);
   const scale = Math.max(1 - scrollY / 1000, 0.85);
-
-  // Load tsparticles engine
-  const particlesInit = async (engine) => {
-    await loadFull(engine);
-  };
 
   return (
     <section
       className="min-h-screen flex items-center justify-center px-6 text-white relative overflow-hidden"
       style={{
-        background: "linear-gradient(120deg, #031531, #0a0a23, #031531, #0a1a40, #031531)",
-        backgroundSize: "800% 800%",
+        background: "linear-gradient(to top, #000010, #031531, #0a0a23)",
+        backgroundSize: "600% 600%",
         animation: "gradientShift 25s ease infinite",
         opacity,
-        transition: "opacity 0.1s ease-in-out",
+        transition: "opacity 0.02s ease-in-out",
       }}
     >
-      {/* Particle / floating shapes background */}
-      <Particles
-        id="tsparticles"
-        init={particlesInit}
-        options={{
-          fullScreen: { enable: false },
-          fpsLimit: 60,
-          particles: {
-            number: { value: 25, density: { enable: true, area: 800 } },
-            color: { value: ["#00f6ff", "#0ff", "#0a0fff"] },
-            shape: { type: "circle" },
-            opacity: { value: 0.3 },
-            size: { value: { min: 5, max: 15 } },
-            move: {
-              enable: true,
-              speed: 0.5,
-              direction: "none",
-              random: true,
-              straight: false,
-              outModes: { default: "out" },
-            },
-          },
-          interactivity: {
-            events: {
-              onHover: { enable: true, mode: "repulse" },
-              onClick: { enable: false },
-            },
-            modes: {
-              repulse: { distance: 80, duration: 0.4 },
-            },
-          },
-          detectRetina: true,
-        }}
-        className="absolute inset-0 -z-20"
-      />
-
-      {/* Ripple background */}
+      {/* RippleGrid background */}
       <div className="absolute inset-0 -z-10">
         <RippleGrid
           enableRainbow={false}
-          gridColor="cyan"
-          rippleIntensity={0.08}
-          gridSize={12}
+          gridColor="red"
+          rippleIntensity={0.05}
+          gridSize={10}
           gridThickness={15}
-          mouseInteraction={true}
-          mouseInteractionRadius={1.5}
-          glowIntensity={0.15}
-          opacity={0.35}
+          mouseInteraction={true}         // cursor effect restored
+          mouseInteractionRadius={1.2}
+          glowIntensity={0.1}
+          opacity={0.3}
+          forceRender={true}              // ensures it shows on initial load
         />
       </div>
 
@@ -108,15 +66,16 @@ export default function Hero() {
             A passionate Full‑Stack Developer building beautiful web experiences.
           </motion.p>
 
+          {/* Liquid-glass button */}
           <motion.a
             href="#projects"
             whileHover={{ scale: 1.1 }}
             className="inline-block mt-8 px-6 py-2 rounded-2xl font-semibold text-white shadow-lg transition-all"
             style={{
-              background: "rgba(0, 150, 255, 0.2)",
-              backdropFilter: "blur(10px)",
-              boxShadow: "0 4px 30px rgba(0, 150, 255, 0.5)",
-              border: "1px solid rgba(0, 150, 255, 0.6)",
+              background: "rgba(0, 150, 255, 0.25)",
+              backdropFilter: "blur(8px)",
+              boxShadow: "0 4px 30px rgba(0, 150, 255, 0.4)",
+              border: "1px solid rgba(0, 150, 255, 0.5)",
             }}
           >
             View My Work
@@ -141,10 +100,12 @@ export default function Hero() {
         </div>
       </Parallax>
 
+      {/* Scroll indicator */}
       <p className="absolute bottom-10 animate-bounce text-gray-400 text-sm">
         Scroll Down
       </p>
 
+      {/* Gradient animation */}
       <style>{`
         @keyframes gradientShift {
           0% { background-position:0% 50%; }
