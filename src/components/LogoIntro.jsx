@@ -5,33 +5,34 @@ export default function LogoIntro({ onComplete }) {
   const [phase, setPhase] = useState(0);
 
   useEffect(() => {
-    if (phase === 5 && onComplete) onComplete();
+    if (phase === 6 && onComplete) onComplete();
   }, [phase, onComplete]);
 
   useEffect(() => {
     const timers = [
-      setTimeout(() => setPhase(1), 1500), // draw G complete
+      setTimeout(() => setPhase(1), 1500), // draw G
       setTimeout(() => setPhase(2), 3000), // G restrokes
       setTimeout(() => setPhase(3), 4000), // show vertical beam
-      setTimeout(() => setPhase(4), 5500), // rotate to horizontal
-      setTimeout(() => setPhase(5), 7000), // slide reveal
+      setTimeout(() => setPhase(4), 6000), // rotate beam
+      setTimeout(() => setPhase(5), 8500), // move beam down
+      setTimeout(() => setPhase(6), 10500), // push curtain up (reveal)
     ];
     return () => timers.forEach(clearTimeout);
   }, []);
 
   return (
     <AnimatePresence>
-      {phase < 6 && (
+      {phase < 7 && (
         <motion.div
           className="fixed inset-0 z-[9999] flex items-center justify-center bg-black overflow-hidden"
-          initial={{ opacity: 1 }}
-          animate={phase === 5 ? { y: "-100vh", opacity: 0 } : {}}
-          transition={{ duration: 1, ease: "easeInOut" }}
+          initial={{ y: 0 }}
+          animate={phase === 6 ? { y: "-100vh" } : {}}
+          transition={{ duration: 1.8, ease: "easeInOut" }}
         >
           {/* Glassmorph overlay */}
           <div className="absolute inset-0 bg-black/40 backdrop-blur-[20px]" />
 
-          {/* G draw phase */}
+          {/* Glowing G path animation */}
           {phase <= 2 && (
             <motion.svg
               width="180"
@@ -56,27 +57,36 @@ export default function LogoIntro({ onComplete }) {
             </motion.svg>
           )}
 
-          {/* Vertical beam + rotation */}
-          {phase >= 3 && phase < 5 && (
+          {/* Vertical beam + rotation + downward motion */}
+          {phase >= 3 && phase <= 5 && (
             <motion.div
-              className="absolute w-[2px] h-full bg-[#00aaff] shadow-[0_0_20px_#00aaff]"
-              initial={{ rotate: 0 }}
+              className="absolute w-[2px] h-full bg-[#00aaff] shadow-[0_0_25px_#00aaff]"
+              initial={{ rotate: 0, y: 0 }}
               animate={
                 phase === 4
-                  ? { rotate: 90, transition: { duration: 1.5, ease: "easeInOut" } }
+                  ? {
+                      rotate: 90,
+                      transition: { duration: 2, ease: "easeInOut" },
+                    }
+                  : phase === 5
+                  ? {
+                      rotate: 90,
+                      y: "50vh", // move beam down to bottom
+                      transition: { duration: 2, ease: "easeInOut" },
+                    }
                   : {}
               }
             />
           )}
 
-          {/* Glow pulse during beam */}
-          {phase >= 3 && phase < 5 && (
+          {/* Glow pulse */}
+          {phase >= 3 && phase <= 5 && (
             <motion.div
-              className="absolute w-32 h-32 rounded-full bg-[#00aaff]/30 blur-3xl"
+              className="absolute w-40 h-40 rounded-full bg-[#00aaff]/25 blur-3xl"
               initial={{ scale: 0 }}
-              animate={{ scale: [0.8, 1.2, 1], opacity: [0.4, 0.6, 0] }}
+              animate={{ scale: [0.8, 1.2, 1], opacity: [0.5, 0.6, 0.3] }}
               transition={{
-                duration: 1.5,
+                duration: 1.8,
                 repeat: Infinity,
                 repeatType: "mirror",
               }}
