@@ -71,12 +71,18 @@ export default function Skills() {
             whileInView={{ scale: 1, y: 0, opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.1, duration: 0.6, ease: "easeOut" }}
-            className="bg-white/30 dark:bg-gray-900/30 backdrop-blur-lg border border-white/20 dark:border-gray-500/20 text-gray-700 dark:text-gray-300 p-6 rounded-xl shadow hover:scale-105 hover:shadow-xl transition-all duration-300 flex flex-col items-center justify-center gap-4"
+            className="bg-white/30 dark:bg-gray-900/30 backdrop-blur-lg border border-white/20 dark:border-gray-500/20 p-6 rounded-xl shadow hover:scale-105 hover:shadow-xl transition-all duration-300 flex flex-col items-center justify-center gap-4"
           >
-            <div className="text-4xl bg-gradient-to-r from-gray-400 via-gray-200 to-gray-400 bg-clip-text text-transparent animate-shimmer">
+            {/* Mercury shimmer icon */}
+            <div
+              className={`text-4xl bg-gradient-to-r from-gray-400 via-gray-200 to-gray-400 bg-clip-text text-transparent animate-shimmer`}
+              style={{ animationDelay: `${index * 0.2}s` }}
+            >
               {skill.icon}
             </div>
-            <span className="text-lg font-semibold">{skill.name}</span>
+            <span className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+              {skill.name}
+            </span>
           </motion.div>
         ))}
       </div>
@@ -89,7 +95,7 @@ export default function Skills() {
         }
         .animate-shimmer {
           background-size: 200% auto;
-          animation: shimmer 2.5s linear infinite;
+          animation: shimmer 3s linear infinite;
         }
       `}</style>
     </section>
