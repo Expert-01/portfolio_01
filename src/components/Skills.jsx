@@ -47,7 +47,7 @@ export default function Skills() {
               duration: 12 + i * 2,
               delay: i * 0.3,
             }}
-            className="w-24 h-24 bg-cyan-400/20 border border-cyan-500 rounded-md absolute"
+            className="w-20 h-20 bg-cyan-400/20 border border-cyan-500 rounded-md absolute"
             style={{
               top: `${i * 15 + 10}%`,
               left: `${i * 15 + 10}%`,
@@ -71,30 +71,30 @@ export default function Skills() {
             whileInView={{ scale: 1, y: 0, opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.1, duration: 0.6, ease: "easeOut" }}
-            className="bg-white/30 dark:bg-gray-900/30 backdrop-blur-lg border border-white/20 dark:border-gray-500/20 p-6 rounded-xl shadow hover:scale-105 hover:shadow-xl transition-all duration-300 flex flex-col items-center justify-center gap-4"
+            className="relative bg-white/30 dark:bg-gray-900/30 backdrop-blur-lg border border-white/20 dark:border-gray-500/20 p-5 rounded-xl shadow hover:scale-105 hover:shadow-xl transition-all duration-300 flex flex-col items-center justify-center gap-3"
           >
-            {/* Mercury shimmer icon */}
-            <div
-              className={`text-4xl bg-gradient-to-r from-gray-400 via-gray-200 to-gray-400 bg-clip-text text-transparent animate-shimmer`}
-              style={{ animationDelay: `${index * 0.2}s` }}
-            >
-              {skill.icon}
+            {/* Mercury shimmer icon effect */}
+            <div className="text-3xl text-gray-400 relative">
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-gray-300 via-gray-100 to-gray-300 rounded-full opacity-50 blur-xl animate-shimmer"
+                style={{ animationDelay: `${index * 0.2}s` }}
+              />
+              <div className="relative z-10">{skill.icon}</div>
             </div>
-            <span className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+            <span className="text-base font-semibold text-gray-600 dark:text-gray-300">
               {skill.name}
             </span>
           </motion.div>
         ))}
       </div>
 
-      {/* Shimmer effect */}
+      {/* Shimmer animation */}
       <style>{`
         @keyframes shimmer {
-          0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
         }
         .animate-shimmer {
-          background-size: 200% auto;
           animation: shimmer 3s linear infinite;
         }
       `}</style>
