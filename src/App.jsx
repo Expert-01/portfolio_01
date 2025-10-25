@@ -1,38 +1,35 @@
 import React, { useState } from "react";
-import Navbar from "./components/Navbar";
+import LogoIntro from "./components/LogoIntro";
 import Hero from "./components/Hero";
 import About from "./components/About";
-import SampleCarousel from "./components/ProjectCarousel";
+import Projects from "./components/Projects";
 import Skills from "./components/Skills";
 import Contact from "./components/Contact";
-import ThemeToggle from "./components/ThemeToggle";
-import Projects from "./components/Projects";
 import ContactMe from "./components/ContactMe";
-import LogoIntro from "./components/LogoIntro"; // 👈 Import the intro animation
+import Navbar from "./components/Navbar";
+import ThemeToggle from "./components/ThemeToggle";
+import SampleCarousel from "./components/ProjectCarousel";
 
 function App() {
-  const [showMain, setShowMain] = useState(false);
+  const [introDone, setIntroDone] = useState(false);
 
   return (
-    <>
-      {/* Intro overlay animation */}
-      {!showMain && <LogoIntro onComplete={() => setShowMain(true)} />}
-
-      {/* Main site content */}
-      {showMain && (
-        <div className="w-full overflow-x-hidden">
+    <div className="w-full overflow-x-hidden">
+      {!introDone && <LogoIntro onComplete={() => setIntroDone(true)} />}
+      {introDone && (
+        <>
           <Navbar />
           <Hero />
           <About />
           <SampleCarousel />
           <Skills />
+          <Projects />
           <Contact />
           <ThemeToggle />
-          <Projects />
           <ContactMe />
-        </div>
+        </>
       )}
-    </>
+    </div>
   );
 }
 
