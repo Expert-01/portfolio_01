@@ -10,7 +10,7 @@ export default function LogoIntro({ onComplete }) {
 
     // Sequential timing
     timers.push(setTimeout(() => setPhase(1), 1600)); // G → vertical line
-    timers.push(setTimeout(() => setPhase(2), 2200)); // rotate across
+    timers.push(setTimeout(() => setPhase(2), 2200)); // rotate horizontal
     timers.push(setTimeout(() => setPhase(3), 3000)); // curtain reveal
     timers.push(
       setTimeout(() => {
@@ -73,9 +73,9 @@ export default function LogoIntro({ onComplete }) {
                 opacity: 1,
               }}
               animate={{
-                height: phase === 1 ? "100vh" : "4px",
-                width: phase === 2 ? "100vw" : "4px",
-                rotate: phase === 2 ? 90 : 0,
+                height: phase === 1 ? "100vh" : "4px", // vertical line or horizontal thin
+                width: "4px", // always thin
+                rotate: phase === 2 ? 90 : 0, // rotate 90° horizontally
                 opacity: phase === 2 ? 0.9 : 1,
               }}
               transition={{
