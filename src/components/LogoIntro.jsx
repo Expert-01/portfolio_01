@@ -1,87 +1,68 @@
-import { useEffect, useRef } from "react"; import * as THREE from "three"; import { gsap } from "gsap";
+import React, { useEffect, useState } from "react";
 
-export default function LogoIntro({ onFinish }) { const mountRef = useRef(null);
+const LogoIntro = () => {
+  const [showContent, setShowContent] = useState(false);
 
-useEffect(() => { const mount = mountRef.current; const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 ); camera.position.z = 3;
+  useEffect(() => {
+    const timer = setTimeout(() => setShowContent(true), 3000); // reveal after 3s
+    return () => clearTimeout(timer);
+  }, []);
 
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-mount.appendChild(renderer.domElement);
+  return (
+    <div className="relative w-screen h-screen overflow-hidden bg-black flex items-center justify-center">
+      {/* Circular Reveal */}
+      <div
+        className={`absolute inset-0 flex items-center justify-center transition-all duration-[1500ms] ease-in-out ${
+          showContent ? "scale-[40] opacity-0" : "scale-0 opacity-100"
+        }`}
+      >
+        <div className="w-10 h-10 bg-[#0af] rounded-full shadow-[0_0_60px_#00bfff]"></div>
+      </div>
 
-// Cube geometry (initial state)
-const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshStandardMaterial({
-  color: 0x0077ff,
-  roughness: 0.3,
-  metalness: 0.8,
-});
-const cube = new THREE.Mesh(cubeGeometry, material);
-scene.add(cube);
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#010a18] to-[#031531]" />
 
-// Lights
-const light = new THREE.PointLight(0xffffff, 1.5);
-light.position.set(5, 5, 5);
-scene.add(light);
-scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+      {/* 3D Cube */}
+      <div
+        className={`relative w-32 h-32 transition-opacity duration-1000 ${
+          showContent ? "opacity-100" : "opacity-0"
+        }`}
+        style={{
+          transformStyle: "preserve-3d",
+          animation: "spinCube 6s linear infinite",
+        }}
+      >
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-32 h-32 bg-gradient-to-br from-[#00bfff88] to-[#0066ff55] border border-[#00bfff44] rounded-xl backdrop-blur-[2px]"
+            style={{
+              transform: [
+                "translateZ(4rem)", // front
+                "rotateY(180deg) translateZ(4rem)", // back
+                "rotateY(90deg) translateZ(4rem)", // right
+                "rotateY(-90deg) translateZ(4rem)", // left
+                "rotateX(90deg) translateZ(4rem)", // top
+                "rotateX(-90deg) translateZ(4rem)", // bottom
+              ][i],
+            }}
+          ></div>
+        ))}
+      </div>
 
-const animate = () => {
-  requestAnimationFrame(animate);
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-  renderer.render(scene, camera);
-};
-animate();
-
-// Morph cube → sphere after 3 seconds
-setTimeout(() => {
-  const sphereGeometry = new THREE.SphereGeometry(0.8, 32, 32);
-  gsap.to(cube.scale, { x: 0, y: 0, z: 0, duration: 0.8 });
-
-  const orb = new THREE.Mesh(sphereGeometry, material);
-  orb.scale.set(0, 0, 0);
-  scene.add(orb);
-
-  gsap.to(orb.scale, {
-    x: 1,
-    y: 1,
-    z: 1,
-    duration: 1.2,
-    delay: 0.8,
-    ease: "power2.out",
-  });
-
-  // Circular reveal
-  setTimeout(() => {
-    const overlay = document.createElement("div");
-    overlay.style.position = "fixed";
-    overlay.style.top = 0;
-    overlay.style.left = 0;
-    overlay.style.width = "100%";
-    overlay.style.height = "100%";
-    overlay.style.background = "#031531";
-    overlay.style.borderRadius = "50%";
-    overlay.style.zIndex = 1000;
-    overlay.style.transform = "scale(0)";
-    overlay.style.transition = "transform 1.5s ease-in-out";
-    mount.appendChild(overlay);
-
-    // Mickey-style circular reveal
-    requestAnimationFrame(() => {
-      overlay.style.transform = "scale(30)";
-    });
-
-    setTimeout(() => {
-      overlay.remove();
-      if (onFinish) onFinish();
-    }, 1500);
-  }, 2000);
-}, 3000);
-
-return () => {
-  mount.removeChild(renderer.domElement);
+      {/* Keyframes */}
+      <style>{`
+        @keyframes spinCube {
+          0% {
+            transform: rotateX(0deg) rotateY(0deg);
+          }
+          100% {
+            transform: rotateX(360deg) rotateY(360deg);
+          }
+        }
+      `}</style>
+    </div>
+  );
 };
 
-}, [onFinish]);
-
-return <div ref={mountRef} className="fixed inset-0 z-[9999] bg-[#031531]" />; }
-
+export default LogoIntro;
