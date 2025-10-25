@@ -1,4 +1,3 @@
-
 import React from "react";
 import { motion } from "framer-motion";
 import {
@@ -15,22 +14,20 @@ import {
 
 export default function Skills() {
   const Skills = [
-    { name: "HTML", icon: <FaHtml5 className="text-orange-500" /> },
-    { name: "CSS", icon: <FaCss3Alt className="text-blue-500" /> },
-    { name: "JavaScript", icon: <FaJsSquare className="text-yellow-500" /> },
-    { name: "React", icon: <FaReact className="text-blue-500" /> },
-    { name: "NodeJs", icon: <FaNodeJs className="text-green-500" /> },
-    { name: "PostgreSQL", icon: <FaDatabase className="text-blue-500" /> },
-    { name: "TailwindCSS", icon: <FaCss3Alt className="text-blue-500" /> },
-    { name: "Git & GitHub", icon: <FaGitAlt className="text-orange-500" /> },
-    { name: "REST APIs", icon: <FaCode className="text-yellow-500" /> },
-    { name: "Python", icon: <FaPython className="text-blue-500" /> },
+    { name: "HTML", icon: <FaHtml5 /> },
+    { name: "CSS", icon: <FaCss3Alt /> },
+    { name: "JavaScript", icon: <FaJsSquare /> },
+    { name: "React", icon: <FaReact /> },
+    { name: "NodeJs", icon: <FaNodeJs /> },
+    { name: "PostgreSQL", icon: <FaDatabase /> },
+    { name: "TailwindCSS", icon: <FaCss3Alt /> },
+    { name: "Git & GitHub", icon: <FaGitAlt /> },
+    { name: "REST APIs", icon: <FaCode /> },
+    { name: "Python", icon: <FaPython /> },
   ];
 
   return (
-    <section
-      className="relative min-h-[70vh] px-4 py-16 overflow-hidden bg-white dark:bg-black transition-colors"
-    >
+    <section className="relative min-h-[70vh] px-4 py-16 overflow-hidden bg-white dark:bg-black transition-colors">
       {/* Floating 3D cubes */}
       <div className="hidden md:flex absolute inset-0 z-0 justify-center items-center pointer-events-none">
         {[...Array(5)].map((_, i) => (
@@ -42,7 +39,7 @@ export default function Skills() {
               x: [0, 20, -20, 0],
               rotateY: [0, 180, 360],
               rotateX: [0, 180, 360],
-              opacity: [0, 0.2, 0.3, 0]
+              opacity: [0, 0.2, 0.3, 0],
             }}
             transition={{
               repeat: Infinity,
@@ -76,11 +73,25 @@ export default function Skills() {
             transition={{ delay: index * 0.1, duration: 0.6, ease: "easeOut" }}
             className="bg-white/30 dark:bg-gray-900/30 backdrop-blur-lg border border-white/20 dark:border-gray-500/20 text-gray-700 dark:text-gray-300 p-6 rounded-xl shadow hover:scale-105 hover:shadow-xl transition-all duration-300 flex flex-col items-center justify-center gap-4"
           >
-            <div className="text-5xl">{skill.icon}</div>
+            <div className="text-4xl bg-gradient-to-r from-gray-400 via-gray-200 to-gray-400 bg-clip-text text-transparent animate-shimmer">
+              {skill.icon}
+            </div>
             <span className="text-lg font-semibold">{skill.name}</span>
           </motion.div>
         ))}
       </div>
+
+      {/* Shimmer effect */}
+      <style>{`
+        @keyframes shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+        .animate-shimmer {
+          background-size: 200% auto;
+          animation: shimmer 2.5s linear infinite;
+        }
+      `}</style>
     </section>
   );
 }
