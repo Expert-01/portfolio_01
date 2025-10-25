@@ -5,15 +5,15 @@ const LogoIntro = ({ onComplete }) => {
   const [done, setDone] = useState(false);
 
   useEffect(() => {
-    // Let the cube spin for 3 seconds, then start curtain reveal
+    // Cube spins first for 3 seconds
     const timer = setTimeout(() => {
       setStartCurtainReveal(true);
 
-      // When curtain finishes moving up, mark intro as done
+      // Curtain takes 3.5s to rise up completely
       setTimeout(() => {
         setDone(true);
         if (onComplete) onComplete();
-      }, 2000);
+      }, 3500);
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -21,13 +21,13 @@ const LogoIntro = ({ onComplete }) => {
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden ${
-        done ? "pointer-events-none" : ""
+      className={`fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden transition-all duration-1000 ${
+        done ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
     >
       {/* ==== CURTAIN BACKDROP ==== */}
       <div
-        className={`absolute inset-0 bg-gradient-to-b from-[#010a18] to-[#031531] transform transition-transform duration-[2000ms] ${
+        className={`absolute inset-0 bg-gradient-to-b from-[#010a18] to-[#031531] transform transition-transform duration-[3500ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
           startCurtainReveal ? "-translate-y-full" : "translate-y-0"
         }`}
         style={{
@@ -35,7 +35,7 @@ const LogoIntro = ({ onComplete }) => {
         }}
       ></div>
 
-      {/* ==== CUBE (under curtain) ==== */}
+      {/* ==== 3D Cube (under curtain) ==== */}
       {!done && (
         <div className="absolute inset-0 flex items-center justify-center bg-black">
           <div
