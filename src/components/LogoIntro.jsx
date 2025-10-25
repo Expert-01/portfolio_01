@@ -1,131 +1,87 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useEffect, useRef } from "react"; import * as THREE from "three"; import { gsap } from "gsap";
 
-export default function LogoIntro({ onComplete }) {
-  const [phase, setPhase] = useState(0);
+export default function LogoIntro({ onFinish }) { const mountRef = useRef(null);
 
-  useEffect(() => {
-    if (phase === 6 && onComplete) onComplete();
-  }, [phase, onComplete]);
+useEffect(() => { const mount = mountRef.current; const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 ); camera.position.z = 3;
 
-  useEffect(() => {
-    const timers = [
-      setTimeout(() => setPhase(1), 1500), // Draw G
-      setTimeout(() => setPhase(2), 3000), // Undraw to dot
-      setTimeout(() => setPhase(3), 4000), // Expand to beam
-      setTimeout(() => setPhase(4), 6000), // Rotate beam
-      setTimeout(() => setPhase(5), 8500), // Slide beam down
-      setTimeout(() => setPhase(6), 11000), // Curtain reveal
-    ];
-    return () => timers.forEach(clearTimeout);
-  }, []);
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+mount.appendChild(renderer.domElement);
 
-  return (
-    <AnimatePresence>
-      {phase < 7 && (
-        <motion.div
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black overflow-hidden"
-          initial={{ y: 0 }}
-          animate={phase === 6 ? { y: "-100%" } : {}}
-          transition={{ duration: 2.2, ease: "easeInOut" }}
-        >
-          {/* Frosted background overlay */}
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-[20px]" />
+// Cube geometry (initial state)
+const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshStandardMaterial({
+  color: 0x0077ff,
+  roughness: 0.3,
+  metalness: 0.8,
+});
+const cube = new THREE.Mesh(cubeGeometry, material);
+scene.add(cube);
 
-          {/* === 1 & 2. Glowing G draw + undraw to dot === */}
-          {phase <= 2 && (
-            <motion.svg
-              width="180"
-              height="180"
-              viewBox="0 0 120 120"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="relative"
-            >
-              <motion.path
-                d="M60 15C35 15 20 35 20 60C20 85 35 105 60 105C80 105 95 90 95 75H70"
-                stroke="#00aaff"
-                strokeWidth="6"
-                strokeLinecap="round"
-                initial={{ pathLength: 0 }}
-                animate={{
-                  pathLength: phase === 1 ? 1 : 0,
-                  opacity: 1,
-                }}
-                transition={{ duration: 1.5, ease: "easeInOut" }}
-                style={{ filter: "drop-shadow(0 0 8px #00aaff)" }}
-              />
+// Lights
+const light = new THREE.PointLight(0xffffff, 1.5);
+light.position.set(5, 5, 5);
+scene.add(light);
+scene.add(new THREE.AmbientLight(0xffffff, 0.4));
 
-              {/* Last blue dot appears as “G” undraws */}
-              {phase === 2 && (
-                <motion.circle
-                  cx="70"
-                  cy="75"
-                  r="4"
-                  fill="#00aaff"
-                  style={{
-                    filter: "drop-shadow(0 0 12px #00aaff)",
-                  }}
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                />
-              )}
-            </motion.svg>
-          )}
+const animate = () => {
+  requestAnimationFrame(animate);
+  cube.rotation.x += 0.01;
+  cube.rotation.y += 0.01;
+  renderer.render(scene, camera);
+};
+animate();
 
-          {/* === 3–5. Beam growth, rotation, slide === */}
-          {phase >= 3 && phase <= 5 && (
-            <motion.div
-              className="absolute bg-[#00aaff] shadow-[0_0_25px_#00aaff]"
-              initial={{
-                width: "4px",
-                height: "0vh",
-                y: 0,
-                rotate: 0,
-              }}
-              animate={
-                phase === 3
-                  ? {
-                      height: "100vh", // grows from dot to full vertical beam
-                      transition: { duration: 1.6, ease: "easeInOut" },
-                    }
-                  : phase === 4
-                  ? {
-                      rotate: 90,
-                      transition: { duration: 2, ease: "easeInOut" },
-                    }
-                  : phase === 5
-                  ? {
-                      rotate: 90,
-                      y: "70vh", // slides downward and offscreen
-                      transition: { duration: 2, ease: "easeInOut" },
-                    }
-                  : {}
-              }
-              style={{
-                width: "4px",
-                height: "100vh",
-                borderRadius: "9999px",
-              }}
-            />
-          )}
+// Morph cube → sphere after 3 seconds
+setTimeout(() => {
+  const sphereGeometry = new THREE.SphereGeometry(0.8, 32, 32);
+  gsap.to(cube.scale, { x: 0, y: 0, z: 0, duration: 0.8 });
 
-          {/* Subtle glow aura behind beam */}
-          {phase >= 3 && phase <= 5 && (
-            <motion.div
-              className="absolute w-40 h-40 rounded-full bg-[#00aaff]/30 blur-3xl"
-              initial={{ scale: 0.8, opacity: 0.3 }}
-              animate={{ scale: [0.9, 1.2, 1], opacity: [0.4, 0.6, 0.3] }}
-              transition={{
-                duration: 1.8,
-                repeat: Infinity,
-                repeatType: "mirror",
-              }}
-            />
-          )}
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
+  const orb = new THREE.Mesh(sphereGeometry, material);
+  orb.scale.set(0, 0, 0);
+  scene.add(orb);
+
+  gsap.to(orb.scale, {
+    x: 1,
+    y: 1,
+    z: 1,
+    duration: 1.2,
+    delay: 0.8,
+    ease: "power2.out",
+  });
+
+  // Circular reveal
+  setTimeout(() => {
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.top = 0;
+    overlay.style.left = 0;
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.background = "#031531";
+    overlay.style.borderRadius = "50%";
+    overlay.style.zIndex = 1000;
+    overlay.style.transform = "scale(0)";
+    overlay.style.transition = "transform 1.5s ease-in-out";
+    mount.appendChild(overlay);
+
+    // Mickey-style circular reveal
+    requestAnimationFrame(() => {
+      overlay.style.transform = "scale(30)";
+    });
+
+    setTimeout(() => {
+      overlay.remove();
+      if (onFinish) onFinish();
+    }, 1500);
+  }, 2000);
+}, 3000);
+
+return () => {
+  mount.removeChild(renderer.domElement);
+};
+
+}, [onFinish]);
+
+return <div ref={mountRef} className="fixed inset-0 z-[9999] bg-[#031531]" />; }
+
