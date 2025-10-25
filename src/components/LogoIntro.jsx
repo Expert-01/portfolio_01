@@ -5,15 +5,15 @@ const LogoIntro = ({ onComplete }) => {
   const [done, setDone] = useState(false);
 
   useEffect(() => {
-    // Cube spins for 3s before the explosion
+    // Cube spins for 3s before starting to explode
     const spinTimer = setTimeout(() => {
       setExplode(true);
 
-      // Explosion lasts ~1.2s, then transition to main site
+      // Explosion lasts 2.5s for a smoother feel
       setTimeout(() => {
         setDone(true);
         if (onComplete) onComplete();
-      }, 1200);
+      }, 2500);
     }, 3000);
 
     return () => clearTimeout(spinTimer);
@@ -29,15 +29,12 @@ const LogoIntro = ({ onComplete }) => {
       {/* ==== 3D Cube ==== */}
       {!done && (
         <div
-          className={`relative w-16 h-16 transition-transform duration-[1200ms] ease-[cubic-bezier(0.4,0,0.2,1)]`}
+          className={`relative w-16 h-16 ${
+            explode ? "animate-explodeCube" : ""
+          }`}
           style={{
             transformStyle: "preserve-3d",
-            transform: explode
-              ? "scale3d(20, 20, 20)" // expands like an explosion
-              : "scale3d(1, 1, 1)",
-            animation: explode
-              ? "none"
-              : "spinCube 3s ease-in-out infinite",
+            animation: explode ? "explodeCube 2.5s ease-in-out forwards" : "spinCube 3s ease-in-out infinite",
           }}
         >
           {Array.from({ length: 6 }).map((_, i) => (
@@ -70,6 +67,25 @@ const LogoIntro = ({ onComplete }) => {
         @keyframes spinCube {
           0% { transform: rotateX(0deg) rotateY(0deg); }
           100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        /* Smooth, multi-phase 3D scale explosion */
+        @keyframes explodeCube {
+          0% {
+            transform: scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg);
+          }
+          30% {
+            transform: scale3d(2, 2, 2) rotateX(30deg) rotateY(20deg);
+          }
+          60% {
+            transform: scale3d(5, 5, 5) rotateX(60deg) rotateY(45deg);
+          }
+          85% {
+            transform: scale3d(10, 10, 10) rotateX(80deg) rotateY(60deg);
+          }
+          100% {
+            transform: scale3d(20, 20, 20) rotateX(90deg) rotateY(70deg);
+          }
         }
       `}</style>
     </div>
