@@ -5,11 +5,11 @@ const LogoIntro = ({ onComplete }) => {
   const [done, setDone] = useState(false);
 
   useEffect(() => {
-    // Step 1: Spin for 3 seconds
+    // Cube spins for 3s before the explosion
     const spinTimer = setTimeout(() => {
       setExplode(true);
 
-      // Step 2: Explosion takes ~1.2s, then intro ends
+      // Explosion lasts ~1.2s, then transition to main site
       setTimeout(() => {
         setDone(true);
         if (onComplete) onComplete();
@@ -21,27 +21,29 @@ const LogoIntro = ({ onComplete }) => {
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden transition-opacity duration-1000 ${
+      className={`fixed inset-0 z-[9999] flex items-center justify-center transition-all duration-1000 ${
         done ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
-      style={{ backgroundColor: "#010a18" }}
+      style={{ backgroundColor: "#031531" }}
     >
       {/* ==== 3D Cube ==== */}
       {!done && (
         <div
-          className={`relative w-16 h-16 transition-transform duration-[1200ms] ease-in-out`}
+          className={`relative w-16 h-16 transition-transform duration-[1200ms] ease-[cubic-bezier(0.4,0,0.2,1)]`}
           style={{
             transformStyle: "preserve-3d",
-            animation: !explode ? "spinCube 3s linear forwards" : "none",
             transform: explode
-              ? "rotateY(90deg) scale(20)"
-              : "rotateY(0deg) scale(1)",
+              ? "scale3d(20, 20, 20)" // expands like an explosion
+              : "scale3d(1, 1, 1)",
+            animation: explode
+              ? "none"
+              : "spinCube 3s ease-in-out infinite",
           }}
         >
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className="absolute w-16 h-16 rounded-xl backdrop-blur-[10px]"
+              className="absolute w-16 h-16 rounded-xl"
               style={{
                 background:
                   "linear-gradient(135deg, rgba(0,191,255,0.25), rgba(0,102,255,0.15))",
@@ -66,8 +68,8 @@ const LogoIntro = ({ onComplete }) => {
 
       <style>{`
         @keyframes spinCube {
-          0% { transform: rotateY(0deg); }
-          100% { transform: rotateY(360deg); }
+          0% { transform: rotateX(0deg) rotateY(0deg); }
+          100% { transform: rotateX(360deg) rotateY(360deg); }
         }
       `}</style>
     </div>
