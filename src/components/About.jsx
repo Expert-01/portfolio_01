@@ -1,11 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import DecryptedText from './DecryptedText';
 
 export default function About() {
   return (
     <section
-      className="relative py-32 px-12 text-gray-300 overflow-hidden flex flex-col md:flex-row items-start justify-between"
+      className="relative py-32 px-6 md:px-12 text-gray-300 overflow-hidden flex flex-col md:flex-row items-start justify-between"
       style={{
         background: "linear-gradient(180deg, #000000, #0a0a10, #031531)",
         backgroundSize: "400% 400%",
@@ -21,16 +20,7 @@ export default function About() {
           transition={{ duration: 1.2 }}
           className="text-6xl md:text-8xl font-azonix font-bold mb-12 text-left"
         >
-          <DecryptedText
-            text="About Me"
-            speed={70}
-            maxIterations={20}
-            characters="AboutMe!@#$%^&*"
-            className="revealed"
-            parentClassName="all-letters"
-            encryptedClassName="encrypted"
-            animateOn="view"
-          />
+          About Me
         </motion.h2>
 
         <motion.p
@@ -38,13 +28,13 @@ export default function About() {
           whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1 }}
-          className="max-w-3xl text-lg md:text-xl leading-relaxed text-left"
+          className="max-w-3xl text-lg md:text-xl leading-relaxed text-left font-sans"
         >
           I'm a <span className="text-cyan-400 font-semibold">Full-Stack Developer</span> passionate about building efficient, scalable, and beautiful digital solutions. With a strong foundation in <span className="text-cyan-400 font-semibold">JavaScript, React, Node.js, PostgreSQL</span>, I enjoy solving real-world problems and constantly learning new tech.
         </motion.p>
       </div>
 
-      {/* Right side: 3D futuristic cubes */}
+      {/* Right side: 3D futuristic cubes (desktop only) */}
       <div className="flex-1 relative hidden md:flex justify-center items-center">
         {[...Array(5)].map((_, i) => (
           <motion.div
@@ -54,7 +44,7 @@ export default function About() {
             transition={{
               repeat: Infinity,
               repeatType: "loop",
-              duration: 6 + i, // stagger speeds slightly
+              duration: 6 + i,
               delay: i * 0.5,
             }}
             className="w-16 h-16 bg-cyan-400/20 border border-cyan-500 rounded-md absolute"
@@ -77,4 +67,4 @@ export default function About() {
       `}</style>
     </section>
   );
-    }
+}
