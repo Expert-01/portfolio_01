@@ -73,14 +73,28 @@ export default function Skills() {
             transition={{ delay: index * 0.1, duration: 0.6, ease: "easeOut" }}
             className="relative bg-white/30 dark:bg-gray-900/30 backdrop-blur-lg border border-white/20 dark:border-gray-500/20 p-5 rounded-xl shadow hover:scale-105 hover:shadow-xl transition-all duration-300 flex flex-col items-center justify-center gap-3"
           >
-            {/* Mercury shimmer icon effect */}
-            <div className="text-3xl text-gray-400 relative">
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-gray-300 via-gray-100 to-gray-300 rounded-full opacity-50 blur-xl animate-shimmer"
-                style={{ animationDelay: `${index * 0.2}s` }}
-              />
-              <div className="relative z-10">{skill.icon}</div>
+            {/* Mercury gradient icon */}
+            <div className="text-3xl w-12 h-12 relative">
+              <svg className="absolute inset-0 w-full h-full">
+                <defs>
+                  <linearGradient id={`mercury-${index}`} x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#cbd5e1" />
+                    <stop offset="50%" stopColor="#f1f5f9" />
+                    <stop offset="100%" stopColor="#cbd5e1" />
+                  </linearGradient>
+                  <mask id={`mask-${index}`}>
+                    <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fontSize="3rem" fontWeight="bold">
+                      {skill.icon.type.render.name}
+                    </text>
+                  </mask>
+                </defs>
+                <rect width="100%" height="100%" fill={`url(#mercury-${index})`} mask={`url(#mask-${index})`} className="animate-mercury" />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                {skill.icon}
+              </div>
             </div>
+
             <span className="text-base font-semibold text-gray-600 dark:text-gray-300">
               {skill.name}
             </span>
@@ -88,14 +102,13 @@ export default function Skills() {
         ))}
       </div>
 
-      {/* Shimmer animation */}
       <style>{`
-        @keyframes shimmer {
+        @keyframes mercury {
           0% { transform: translateX(-100%); }
           100% { transform: translateX(100%); }
         }
-        .animate-shimmer {
-          animation: shimmer 3s linear infinite;
+        .animate-mercury {
+          animation: mercury 3s linear infinite;
         }
       `}</style>
     </section>
