@@ -1,120 +1,35 @@
-import React, { useRef, useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import React from "react";
+//import  ParallaxImage  from "./components/ParallaxImage";
+import Hero from "./components/Hero";
+import Contact from "./components/Contact";
+import ThemeToggle from "./components/ThemeToggle";
+import Projects from "./components/Projects";
+import Skills from "./components/Skills";
+import Navbar from "./components/Navbar";
+//import ProjectCarousel from "./components/ProjectCarousel";
+import SampleCarousel from "./components/ProjectCarousel";
+import About from "./components/About";
+import ContactMe from "./components/ContactMe";
 
-const skills = [
-  {
-    name: "Frontend Development",
-    description:
-      "Expertise in building responsive and interactive user interfaces with React, Tailwind CSS, and modern frontend tools. I focus on performance, accessibility, and smooth UX."
-  },
-  {
-    name: "Backend Development",
-    description:
-      "Strong foundation in Node.js, Express, and PostgreSQL. I build scalable APIs, implement authentication, and manage databases efficiently for real-world applications."
-  },
-  {
-    name: "UI/UX & Design",
-    description:
-      "Passionate about creating visually appealing and user-friendly designs. I use Figma and design principles to craft interfaces that are both aesthetic and functional."
-  }
-];
 
-export default function About() {
-  const containerRef = useRef(null);
-  const [isSticky, setIsSticky] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      setIsSticky(rect.top <= 0 && rect.bottom >= window.innerHeight);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
+function App() {
   return (
-    <section
-      ref={containerRef}
-      className="relative w-full flex overflow-hidden"
-      style={{
-        background: "linear-gradient(180deg, #000000, #0a0a10, #031531)",
-        backgroundSize: "400% 400%",
-        animation: "gradientShift 25s ease infinite",
-        minHeight: "150vh" // make enough height for scrolling through all skills
-      }}
-    >
-      {/* Left: About Me + Skills */}
-      <div
-        className={`flex-1 space-y-12 md:space-y-20 px-6 md:px-12 ${
-          isSticky ? "sticky top-0 h-screen" : ""
-        }`}
-      >
-        <motion.h2
-          initial={{ y: 50, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.2 }}
-          className="text-6xl md:text-8xl font-azonix font-bold text-left mb-12"
-        >
-          About Me
-        </motion.h2>
 
-        {skills.map((skill, idx) => (
-          <div
-            key={idx}
-            className="mb-16 relative"
-            style={{ height: "200px" }} // space for stacking
-          >
-            <h3
-              className="text-3xl md:text-4xl font-orbitron font-bold text-cyan-400 mb-2 sticky top-32 z-10"
-            >
-              {skill.name}
-            </h3>
-            <motion.p
-              initial={{ y: 20, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, delay: 0.2 }}
-              className="text-lg md:text-xl leading-relaxed font-sans mt-12"
-            >
-              {skill.description}
-            </motion.p>
-          </div>
-        ))}
-      </div>
-
-      {/* Right: 3D cubes */}
-      <div className="flex-1 relative hidden md:flex justify-center items-center">
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ y: 50, opacity: 0, rotateY: 0 }}
-            animate={{ y: [50, 0, 50], rotateY: 360, opacity: [0, 1, 0] }}
-            transition={{
-              repeat: Infinity,
-              repeatType: "loop",
-              duration: 6 + i,
-              delay: i * 0.5
-            }}
-            className="w-16 h-16 bg-cyan-400/20 border border-cyan-500 rounded-md absolute"
-            style={{
-              top: `${i * 20}%`,
-              left: `${i * 15}%`,
-              transformStyle: "preserve-3d"
-            }}
-          />
-        ))}
-      </div>
-
-      <style>{`
-        @keyframes gradientShift {
-          0% { background-position:0% 50%; }
-          50% { background-position:100% 50%; }
-          100% { background-position:0% 50%; }
-        }
-      `}</style>
-    </section>
+    <div className="w-full overflow-x-hidden">
+      <Navbar />
+      <Hero />
+      <About/>
+      <SampleCarousel />
+      <Skills />
+      <Contact />
+      <ThemeToggle />
+     {/* <ProjectCarousel />
+     */} 
+      <Projects />
+      {/* <ParallaxImage /> */}
+      <ContactMe/>
+    </div>
   );
 }
+
+export default App;
