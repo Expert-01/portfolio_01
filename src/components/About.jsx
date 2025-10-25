@@ -1,37 +1,58 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+const skills = [
+  {
+    name: "Frontend Development",
+    description: "Expertise in building responsive and interactive user interfaces with React, Tailwind CSS, and modern frontend tools. I focus on performance, accessibility, and smooth UX."
+  },
+  {
+    name: "Backend Development",
+    description: "Strong foundation in Node.js, Express, and PostgreSQL. I build scalable APIs, implement authentication, and manage databases efficiently for real-world applications."
+  },
+  {
+    name: "UI/UX & Design",
+    description: "Passionate about creating visually appealing and user-friendly designs. I use Figma and design principles to craft interfaces that are both aesthetic and functional."
+  }
+];
+
 export default function About() {
   return (
     <section
-      className="relative py-32 px-6 md:px-12 text-gray-300 overflow-hidden flex flex-col md:flex-row items-start justify-between"
+      className="relative py-32 px-6 md:px-12 text-gray-400 overflow-hidden flex flex-col md:flex-row items-start justify-between"
       style={{
         background: "linear-gradient(180deg, #000000, #0a0a10, #031531)",
         backgroundSize: "400% 400%",
         animation: "gradientShift 25s ease infinite"
       }}
     >
-      {/* Left side: Title + Paragraph */}
+      {/* Left side: Title + Paragraphs */}
       <div className="flex-1">
         <motion.h2
           initial={{ y: 50, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1.2 }}
-          className="text-6xl md:text-8xl font-azonix font-bold mb-12 text-left"
+          className="text-6xl md:text-8xl font-azonix font-bold mb-16 text-left"
         >
           About Me
         </motion.h2>
 
-        <motion.p
-          initial={{ y: 30, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1 }}
-          className="max-w-3xl text-lg md:text-xl leading-relaxed text-left font-sans"
-        >
-          I'm a <span className="text-cyan-400 font-semibold">Full-Stack Developer</span> passionate about building efficient, scalable, and beautiful digital solutions. With a strong foundation in <span className="text-cyan-400 font-semibold">JavaScript, React, Node.js, PostgreSQL</span>, I enjoy solving real-world problems and constantly learning new tech.
-        </motion.p>
+        {skills.map((skill, idx) => (
+          <motion.div
+            key={idx}
+            initial={{ y: 30, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: idx * 0.3 }}
+            className="mb-12"
+          >
+            <h3 className="text-2xl md:text-3xl font-semibold text-cyan-400 mb-2">{skill.name}</h3>
+            <p className="text-lg md:text-xl leading-relaxed font-sans">
+              {skill.description}
+            </p>
+          </motion.div>
+        ))}
       </div>
 
       {/* Right side: 3D futuristic cubes (desktop only) */}
