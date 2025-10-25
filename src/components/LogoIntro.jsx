@@ -8,15 +8,15 @@ export default function LogoIntro({ onComplete }) {
   useEffect(() => {
     const timers = [];
 
-    // Sequential timing
-    timers.push(setTimeout(() => setPhase(1), 1600)); // G → vertical line
-    timers.push(setTimeout(() => setPhase(2), 2200)); // rotate horizontal
-    timers.push(setTimeout(() => setPhase(3), 3000)); // curtain reveal
+    // Sequential timing for each animation phase
+    timers.push(setTimeout(() => setPhase(1), 1600)); // Draw G → vertical beam
+    timers.push(setTimeout(() => setPhase(2), 2200)); // Rotate pivot
+    timers.push(setTimeout(() => setPhase(3), 3200)); // Curtain reveal
     timers.push(
       setTimeout(() => {
         setShow(false);
         if (onComplete) onComplete();
-      }, 3700)
+      }, 3900)
     );
 
     return () => timers.forEach(clearTimeout);
@@ -34,10 +34,10 @@ export default function LogoIntro({ onComplete }) {
             transition: { duration: 0.7, ease: "easeInOut" },
           }}
         >
-          {/* Frosted glass backdrop */}
+          {/* Glassmorph blur overlay */}
           <div className="absolute inset-0 bg-black/40 backdrop-blur-[20px]" />
 
-          {/* PHASE 0: Glowing 'G' drawing */}
+          {/* PHASE 0: Glowing G formation */}
           {phase === 0 && (
             <motion.svg
               width="160"
@@ -62,7 +62,7 @@ export default function LogoIntro({ onComplete }) {
             </motion.svg>
           )}
 
-          {/* PHASE 1–2: Transform into glowing beam */}
+          {/* PHASE 1–2: Beam transition and rotation */}
           {phase >= 1 && phase < 3 && (
             <motion.div
               className="absolute bg-gradient-to-b from-[#00aaff] to-[#0077ff] rounded-full shadow-[0_0_40px_#00aaff]"
@@ -71,22 +71,24 @@ export default function LogoIntro({ onComplete }) {
                 height: "0vh",
                 rotate: 0,
                 opacity: 1,
+                originX: 0.5,
+                originY: 0.5,
               }}
               animate={{
-                height: phase === 1 ? "100vh" : "4px", // vertical line or horizontal thin
-                width: "4px", // always thin
-                rotate: phase === 2 ? [90, 91, 89, 90] : 0, // small oscillation for subtle spin
-                opacity: phase === 2 ? 0.9 : 1,
+                height: phase === 1 ? "100vh" : "4px",
+                width: "4px", // stays thin
+                rotate: phase === 2 ? 360 : 0, // smooth continuous spin
+                opacity: phase === 2 ? 0.95 : 1,
               }}
               transition={{
-                duration: phase === 1 ? 0.6 : 2, // slower rotation oscillation
+                duration: phase === 1 ? 0.6 : 2.5,
                 ease: "linear",
-                repeat: phase === 2 ? Infinity : 0,
+                repeat: phase === 2 ? Infinity : 0, // continuous rotation
               }}
             />
           )}
 
-          {/* PHASE 3: Curtain reveal — pulls up */}
+          {/* PHASE 3: Curtain reveal (beam lifts the dark overlay) */}
           {phase === 3 && (
             <motion.div
               className="absolute inset-0 bg-black"
@@ -96,7 +98,7 @@ export default function LogoIntro({ onComplete }) {
             />
           )}
 
-          {/* Soft fading glow behind everything */}
+          {/* Ambient blue glow pulse */}
           <motion.div
             className="absolute w-52 h-52 rounded-full bg-[#00aaff]/25 blur-3xl"
             initial={{ scale: 0, opacity: 0.3 }}
