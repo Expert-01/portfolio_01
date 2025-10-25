@@ -1,6 +1,6 @@
 import React from "react";
 import { FaLinkedin, FaInstagram, FaGithub } from "react-icons/fa";
-import { Link as ScrollLink } from "react-scroll"; // optional for smooth scroll
+import { Link as ScrollLink } from "react-scroll"; // for smooth scroll
 
 export default function Footer() {
   const socialLinks = [
@@ -17,9 +17,9 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-black dark:bg-black py-16 px-6 flex flex-col md:flex-row justify-center items-start gap-16">
+    <footer className="bg-black dark:bg-black py-16 px-6 flex flex-col md:flex-row justify-center gap-20">
       {/* Social Links Stack */}
-      <div className="flex flex-col items-center space-y-6">
+      <div className="flex flex-col items-start space-y-4">
         <h3 className="text-gray-400 text-xl font-semibold mb-4">Connect</h3>
         {socialLinks.map((link, idx) => (
           <a
@@ -27,7 +27,7 @@ export default function Footer() {
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:scale-110 transition-transform duration-300 hover:shadow-lg hover:bg-white/10"
+            className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:scale-105 transition-transform duration-300 hover:shadow-lg hover:bg-white/10"
           >
             <span className="text-gray-200 text-2xl">{link.icon}</span>
             <span className="text-gray-300 font-medium">{link.label}</span>
@@ -36,7 +36,7 @@ export default function Footer() {
       </div>
 
       {/* Menu Links Stack */}
-      <div className="flex flex-col items-center space-y-4">
+      <div className="flex flex-col items-start space-y-2">
         <h3 className="text-gray-400 text-xl font-semibold mb-4">Menu</h3>
         {menuLinks.map((link, idx) => (
           <ScrollLink
@@ -52,7 +52,7 @@ export default function Footer() {
       </div>
 
       {/* Copyright */}
-      <div className="flex flex-col items-center mt-10 md:mt-0">
+      <div className="flex flex-col items-center mt-10 md:mt-0 md:ml-20">
         <p className="text-gray-500 text-sm">&copy; {new Date().getFullYear()} Gideon Soala</p>
         <p className="text-gray-500 text-sm">All rights reserved</p>
       </div>
