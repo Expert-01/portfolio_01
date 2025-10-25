@@ -5,47 +5,67 @@ import DecryptedText from './DecryptedText';
 export default function About() {
   return (
     <section
-      className="relative py-32 px-12 text-gray-300 overflow-hidden"
+      className="relative py-32 px-12 text-gray-300 overflow-hidden flex flex-col md:flex-row items-start justify-between"
       style={{
         background: "linear-gradient(180deg, #000000, #0a0a10, #031531)",
         backgroundSize: "400% 400%",
         animation: "gradientShift 25s ease infinite"
       }}
     >
-      {/* Optional abstract shape / 3D visual */}
-      <div className="absolute top-10 right-0 -z-10 w-72 h-72 bg-cyan-500 rounded-full opacity-10 animate-pulse hidden md:block"></div>
+      {/* Left side: Title + Paragraph */}
+      <div className="flex-1">
+        <motion.h2
+          initial={{ y: 50, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2 }}
+          className="text-6xl md:text-8xl font-azonix font-bold mb-12 text-left"
+        >
+          <DecryptedText
+            text="About Me"
+            speed={70}
+            maxIterations={20}
+            characters="AboutMe!@#$%^&*"
+            className="revealed"
+            parentClassName="all-letters"
+            encryptedClassName="encrypted"
+            animateOn="view"
+          />
+        </motion.h2>
 
-      {/* Title */}
-      <motion.h2
-        initial={{ y: 50, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1.2 }}
-        className="text-6xl md:text-8xl font-azonix font-bold mb-12 text-left"
-      >
-        <DecryptedText
-          text="About Me"
-          speed={70}
-          maxIterations={20}
-          characters="AboutMe!@#$%^&*"
-          className="revealed"
-          parentClassName="all-letters"
-          encryptedClassName="encrypted"
-          animateOn="view"
-        />
-      </motion.h2>
+        <motion.p
+          initial={{ y: 30, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1 }}
+          className="max-w-3xl text-lg md:text-xl leading-relaxed text-left"
+        >
+          I'm a <span className="text-cyan-400 font-semibold">Full-Stack Developer</span> passionate about building efficient, scalable, and beautiful digital solutions. With a strong foundation in <span className="text-cyan-400 font-semibold">JavaScript, React, Node.js, PostgreSQL</span>, I enjoy solving real-world problems and constantly learning new tech.
+        </motion.p>
+      </div>
 
-      {/* Paragraph */}
-      <motion.p
-        initial={{ y: 30, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1 }}
-        className="max-w-3xl text-lg md:text-xl leading-relaxed text-left"
-      >
-        I'm a <span className="text-cyan-400 font-semibold">Full-Stack Developer</span> passionate about building efficient, scalable, and beautiful digital solutions.
-        With a strong foundation in <span className="text-cyan-400 font-semibold">JavaScript, React, Node.js, PostgreSQL</span>, I enjoy solving real-world problems and constantly learning new tech.
-      </motion.p>
+      {/* Right side: 3D futuristic cubes */}
+      <div className="flex-1 relative hidden md:flex justify-center items-center">
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={i}
+            initial={{ y: 50, opacity: 0, rotateY: 0 }}
+            animate={{ y: [50, 0, 50], rotateY: 360, opacity: [0, 1, 0] }}
+            transition={{
+              repeat: Infinity,
+              repeatType: "loop",
+              duration: 6 + i, // stagger speeds slightly
+              delay: i * 0.5,
+            }}
+            className="w-16 h-16 bg-cyan-400/20 border border-cyan-500 rounded-md absolute"
+            style={{
+              top: `${i * 20}%`,
+              left: `${i * 15}%`,
+              transformStyle: "preserve-3d",
+            }}
+          />
+        ))}
+      </div>
 
       {/* Gradient animation keyframes */}
       <style>{`
@@ -57,4 +77,4 @@ export default function About() {
       `}</style>
     </section>
   );
-}
+    }
