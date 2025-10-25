@@ -2,6 +2,7 @@
   "name": "my-portfolio",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -19,7 +20,9 @@
     "react-scroll-parallax": "^3.4.5",
     "react-simple-typewriter": "^5.0.1",
     "react-slick": "^0.30.3",
-    "slick-carousel": "^1.8.1"
+    "slick-carousel": "^1.8.1",
+    "react-tsparticles": "^2.11.1",
+    "tsparticles": "^2.11.1"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.6.0",
