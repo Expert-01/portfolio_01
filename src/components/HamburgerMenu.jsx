@@ -1,22 +1,44 @@
-import { button } from "framer-motion/client";
-import { useState } from "react";
+import { motion } from "framer-motion";
 
-export default function HamburgerMenu({isOpen}) {
-   // const[isOpen, setIsOpen] = useState(false);
+export default function HamburgerMenu({ isOpen, toggleMenu }) {
+  return (
+    <button
+      onClick={toggleMenu}
+      aria-label="Toggle Menu"
+      aria-expanded={isOpen}
+      className="relative w-8 h-6 flex flex-col justify-between items-center group focus:outline-none"
+    >
+      {/* Top bar */}
+      <motion.span
+        animate={{
+          rotate: isOpen ? 45 : 0,
+          y: isOpen ? 8 : 0,
+          width: isOpen ? "100%" : "100%",
+        }}
+        transition={{ duration: 0.3 }}
+        className="block h-[3px] w-full bg-gradient-to-r from-blue-400 to-cyan-300 rounded"
+      ></motion.span>
 
-    return(
-        <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="relative w-8 h-7 flex flex-col justify-between items-center group" aria-label="Toggle Menu"
-        
-        >
-            <span
-            className={`block h-[4px] w-full bg-white rounded transition-transform duration-300 ease-in-out absolute ${isOpen ? "rotate-45 top-1/2 -translate-y-1/2"  : "top-1" }`} />
-                <span
-                    className={`block h-[4px] w-6 bg-white rounded transition-transform duration-300 ease-in-out absolute ${isOpen ? "opacity-0" : "top-1/2 -translate-y-1/2" }`} />
-                <span
-                    className={`block h-[4px] w-4 bg-white rounded transition-transform duration-300 ease-in-out absolute ${isOpen ? "-rotate-45 top-1/2 -translate-y-1/2 w-7" : "bottom-1" }`} />
+      {/* Middle bar */}
+      <motion.span
+        animate={{
+          opacity: isOpen ? 0 : 1,
+          scaleX: isOpen ? 0.5 : 1,
+        }}
+        transition={{ duration: 0.3 }}
+        className="block h-[3px] w-full bg-gradient-to-r from-blue-400 to-cyan-300 rounded"
+      ></motion.span>
 
-        </button>
-    )
+      {/* Bottom bar */}
+      <motion.span
+        animate={{
+          rotate: isOpen ? -45 : 0,
+          y: isOpen ? -8 : 0,
+          width: isOpen ? "100%" : "70%",
+        }}
+        transition={{ duration: 0.3 }}
+        className="block h-[3px] bg-gradient-to-r from-blue-400 to-cyan-300 rounded"
+      ></motion.span>
+    </button>
+  );
 }
