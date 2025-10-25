@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { Typewriter } from "react-simple-typewriter";
 import { Parallax } from "react-scroll-parallax";
 import RippleGrid from './RippleGrid';
+import Particles from "react-tsparticles";
+import { loadFull } from "tsparticles";
 
 export default function Hero() {
   const [scrollY, setScrollY] = useState(0);
@@ -13,9 +15,13 @@ export default function Hero() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Delay opacity fade (start fading only after 150px)
   const opacity = scrollY < 150 ? 1 : Math.max(1 - (scrollY - 150) / 300, 0);
   const scale = Math.max(1 - scrollY / 1000, 0.85);
+
+  // Load tsparticles engine
+  const particlesInit = async (engine) => {
+    await loadFull(engine);
+  };
 
   return (
     <section
@@ -28,6 +34,42 @@ export default function Hero() {
         transition: "opacity 0.1s ease-in-out",
       }}
     >
+      {/* Particle / floating shapes background */}
+      <Particles
+        id="tsparticles"
+        init={particlesInit}
+        options={{
+          fullScreen: { enable: false },
+          fpsLimit: 60,
+          particles: {
+            number: { value: 25, density: { enable: true, area: 800 } },
+            color: { value: ["#00f6ff", "#0ff", "#0a0fff"] },
+            shape: { type: "circle" },
+            opacity: { value: 0.3 },
+            size: { value: { min: 5, max: 15 } },
+            move: {
+              enable: true,
+              speed: 0.5,
+              direction: "none",
+              random: true,
+              straight: false,
+              outModes: { default: "out" },
+            },
+          },
+          interactivity: {
+            events: {
+              onHover: { enable: true, mode: "repulse" },
+              onClick: { enable: false },
+            },
+            modes: {
+              repulse: { distance: 80, duration: 0.4 },
+            },
+          },
+          detectRetina: true,
+        }}
+        className="absolute inset-0 -z-20"
+      />
+
       {/* Ripple background */}
       <div className="absolute inset-0 -z-10">
         <RippleGrid
@@ -36,7 +78,7 @@ export default function Hero() {
           rippleIntensity={0.08}
           gridSize={12}
           gridThickness={15}
-          mouseInteraction={true}      // ensure cursor effect works
+          mouseInteraction={true}
           mouseInteractionRadius={1.5}
           glowIntensity={0.15}
           opacity={0.35}
@@ -66,7 +108,6 @@ export default function Hero() {
             A passionate Full‑Stack Developer building beautiful web experiences.
           </motion.p>
 
-          {/* Liquid-glass CTA */}
           <motion.a
             href="#projects"
             whileHover={{ scale: 1.1 }}
