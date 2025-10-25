@@ -23,9 +23,9 @@
     "slick-carousel": "^1.8.1",
     "react-tsparticles": "^2.11.1",
     "tsparticles": "^2.11.1",
-    "three": "^0.170.0",                     // 🔹 Added for 3D cube + orb animation
-    "@react-three/fiber": "^9.0.0",          // 🔹 React wrapper for Three.js
-    "@react-three/drei": "^9.96.1"           // 🔹 Helpers for lighting, shapes, etc.
+    "three": "^0.170.0",
+    "@react-three/fiber": "^9.0.0",
+    "@react-three/drei": "^9.96.1"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.6.0",
