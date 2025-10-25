@@ -10,6 +10,8 @@ module.exports = {
         sans: ['Space Grotesk', 'sans-serif'], // Custom font
         orbitron: ['Orbitron', 'monospace'], // Custom font for code
         mono: ['Share Tech Mono', 'monospace'], // Custom font for code
+        azonix: ['Azonix', 'sans-serif'],
+
       },
     },
   },
