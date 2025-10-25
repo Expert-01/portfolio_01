@@ -75,12 +75,13 @@ export default function LogoIntro({ onComplete }) {
               animate={{
                 height: phase === 1 ? "100vh" : "4px", // vertical line or horizontal thin
                 width: "4px", // always thin
-                rotate: phase === 2 ? 90 : 0, // rotate 90° horizontally
+                rotate: phase === 2 ? [90, 91, 89, 90] : 0, // small oscillation for subtle spin
                 opacity: phase === 2 ? 0.9 : 1,
               }}
               transition={{
-                duration: phase === 1 ? 0.6 : 1.2,
-                ease: "easeInOut",
+                duration: phase === 1 ? 0.6 : 2, // slower rotation oscillation
+                ease: "linear",
+                repeat: phase === 2 ? Infinity : 0,
               }}
             />
           )}
