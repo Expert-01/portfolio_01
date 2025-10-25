@@ -21,7 +21,7 @@ export default function About() {
         whileInView={{ y: 0, opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 1.2 }}
-        className="text-6xl md:text-8xl font-orbitron font-bold mb-12 text-left"
+        className="text-6xl md:text-8xl font-azonix font-bold mb-12 text-left"
       >
         <DecryptedText
           text="About Me"
