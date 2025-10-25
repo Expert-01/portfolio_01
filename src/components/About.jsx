@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, useViewportScroll, useTransform } from 'framer-motion';
 
 const skills = [
   {
@@ -17,6 +17,13 @@ const skills = [
 ];
 
 export default function About() {
+  const { scrollY } = useViewportScroll();
+
+  // Calculate transform for each skill to create a “pause” effect
+  const transforms = skills.map((_, idx) => 
+    useTransform(scrollY, [idx * 300, idx * 300 + 200], [0, -50])
+  );
+
   return (
     <section
       className="relative py-32 px-6 md:px-12 text-gray-400 overflow-hidden flex flex-col md:flex-row items-start justify-between"
@@ -27,13 +34,13 @@ export default function About() {
       }}
     >
       {/* Left side: Title + Paragraphs */}
-      <div className="flex-1">
+      <div className="flex-1 space-y-20">
         <motion.h2
           initial={{ y: 50, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1.2 }}
-          className="text-6xl md:text-8xl font-azonix font-bold mb-16 text-left"
+          className="text-6xl md:text-8xl font-azonix font-bold text-left"
         >
           About Me
         </motion.h2>
@@ -41,10 +48,7 @@ export default function About() {
         {skills.map((skill, idx) => (
           <motion.div
             key={idx}
-            initial={{ y: 30, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: idx * 0.3 }}
+            style={{ y: transforms[idx] }}
             className="mb-12"
           >
             <h3 className="text-2xl md:text-3xl font-semibold text-cyan-400 mb-2">{skill.name}</h3>
@@ -78,7 +82,6 @@ export default function About() {
         ))}
       </div>
 
-      {/* Gradient animation keyframes */}
       <style>{`
         @keyframes gradientShift {
           0% { background-position:0% 50%; }
