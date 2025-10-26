@@ -15,7 +15,7 @@ function App() {
 
   return (
     
-<div className="w-full overflow-x-hidden bg-[#031531] min-h-screen text-white">
+<div className="w-full overflow-x-hidden bg-[#031531] text-white">
       {!introDone && <LogoIntro onComplete={() => setIntroDone(true)} />}
       {introDone && (
         <>
