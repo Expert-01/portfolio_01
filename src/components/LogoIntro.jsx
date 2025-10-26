@@ -1,79 +1,131 @@
-import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 
-const LogoIntro = ({ onComplete }) => {
-  const [revealCurtain, setRevealCurtain] = useState(false);
-  const [introDone, setIntroDone] = useState(false);
+export default function LogoIntro({ onComplete }) {
+  const [phase, setPhase] = useState(0);
 
   useEffect(() => {
-    // Cube spins for 3s, then curtain reveals
-    const curtainTimer = setTimeout(() => {
-      setRevealCurtain(true);
-      // After curtain finishes moving up, call onComplete
-      setTimeout(() => {
-        setIntroDone(true);
-        if (onComplete) onComplete();
-      }, 1500); // matches curtain animation
-    }, 3000);
+    if (phase === 6 && onComplete) onComplete();
+  }, [phase, onComplete]);
 
-    return () => clearTimeout(curtainTimer);
-  }, [onComplete]);
+  useEffect(() => {
+    const timers = [
+      setTimeout(() => setPhase(1), 1500), // Draw G
+      setTimeout(() => setPhase(2), 3000), // Undraw to dot
+      setTimeout(() => setPhase(3), 4000), // Expand to beam
+      setTimeout(() => setPhase(4), 6000), // Rotate beam
+      setTimeout(() => setPhase(5), 8500), // Slide beam down
+      setTimeout(() => setPhase(6), 11000), // Curtain reveal
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, []);
 
   return (
-    <div className="fixed inset-0 w-screen h-screen overflow-hidden z-[9999]">
-      {/* CURTAIN (main reveal layer) */}
-      <div
-        className={`absolute inset-0 bg-gradient-to-b from-[#010a18] to-[#031531] transition-transform duration-[1500ms] ease-in-out ${
-          revealCurtain ? "-translate-y-full" : "translate-y-0"
-        }`}
-      ></div>
+    <AnimatePresence>
+      {phase < 7 && (
+        <motion.div
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black overflow-hidden"
+          initial={{ y: 0 }}
+          animate={phase === 6 ? { y: "-100%" } : {}}
+          transition={{ duration: 2.2, ease: "easeInOut" }}
+        >
+          {/* Frosted background overlay */}
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-[20px]" />
 
-      {/* 3D LIQUID GLASS CUBE */}
-      {!introDone && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black">
-          <div
-            className="relative w-16 h-16"
-            style={{
-              transformStyle: "preserve-3d",
-              animation: "spinCube 6s linear infinite",
-            }}
-          >
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div
-                key={i}
-                className="absolute w-16 h-16 rounded-xl backdrop-blur-[12px]"
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(0,191,255,0.25), rgba(0,102,255,0.12))",
-                  border: "1px solid rgba(0,191,255,0.25)",
-                  boxShadow:
-                    "inset 0 0 15px rgba(0,191,255,0.3), 0 0 20px rgba(0,191,255,0.3)",
-                  transform: [
-                    "translateZ(2rem)", // front
-                    "rotateY(180deg) translateZ(2rem)", // back
-                    "rotateY(90deg) translateZ(2rem)", // right
-                    "rotateY(-90deg) translateZ(2rem)", // left
-                    "rotateX(90deg) translateZ(2rem)", // top
-                    "rotateX(-90deg) translateZ(2rem)", // bottom
-                  ][i],
+          {/* === 1 & 2. Glowing G draw + undraw to dot === */}
+          {phase <= 2 && (
+            <motion.svg
+              width="180"
+              height="180"
+              viewBox="0 0 120 120"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="relative"
+            >
+              <motion.path
+                d="M60 15C35 15 20 35 20 60C20 85 35 105 60 105C80 105 95 90 95 75H70"
+                stroke="#00aaff"
+                strokeWidth="6"
+                strokeLinecap="round"
+                initial={{ pathLength: 0 }}
+                animate={{
+                  pathLength: phase === 1 ? 1 : 0,
+                  opacity: 1,
                 }}
-              >
-                {/* Shimmer effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-[#00bfff22] to-transparent blur-[1px] animate-pulse" />
-              </div>
-            ))}
-          </div>
-        </div>
+                transition={{ duration: 1.5, ease: "easeInOut" }}
+                style={{ filter: "drop-shadow(0 0 8px #00aaff)" }}
+              />
+
+              {/* Last blue dot appears as “G” undraws */}
+              {phase === 2 && (
+                <motion.circle
+                  cx="70"
+                  cy="75"
+                  r="4"
+                  fill="#00aaff"
+                  style={{
+                    filter: "drop-shadow(0 0 12px #00aaff)",
+                  }}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                />
+              )}
+            </motion.svg>
+          )}
+
+          {/* === 3–5. Beam growth, rotation, slide === */}
+          {phase >= 3 && phase <= 5 && (
+            <motion.div
+              className="absolute bg-[#00aaff] shadow-[0_0_25px_#00aaff]"
+              initial={{
+                width: "4px",
+                height: "0vh",
+                y: 0,
+                rotate: 0,
+              }}
+              animate={
+                phase === 3
+                  ? {
+                      height: "100vh", // grows from dot to full vertical beam
+                      transition: { duration: 1.6, ease: "easeInOut" },
+                    }
+                  : phase === 4
+                  ? {
+                      rotate: 90,
+                      transition: { duration: 2, ease: "easeInOut" },
+                    }
+                  : phase === 5
+                  ? {
+                      rotate: 90,
+                      y: "70vh", // slides downward and offscreen
+                      transition: { duration: 2, ease: "easeInOut" },
+                    }
+                  : {}
+              }
+              style={{
+                width: "4px",
+                height: "100vh",
+                borderRadius: "9999px",
+              }}
+            />
+          )}
+
+          {/* Subtle glow aura behind beam */}
+          {phase >= 3 && phase <= 5 && (
+            <motion.div
+              className="absolute w-40 h-40 rounded-full bg-[#00aaff]/30 blur-3xl"
+              initial={{ scale: 0.8, opacity: 0.3 }}
+              animate={{ scale: [0.9, 1.2, 1], opacity: [0.4, 0.6, 0.3] }}
+              transition={{
+                duration: 1.8,
+                repeat: Infinity,
+                repeatType: "mirror",
+              }}
+            />
+          )}
+        </motion.div>
       )}
-
-      {/* KEYFRAMES */}
-      <style>{`
-        @keyframes spinCube {
-          0% { transform: rotateX(0deg) rotateY(0deg); }
-          100% { transform: rotateX(360deg) rotateY(360deg); }
-        }
-      `}</style>
-    </div>
+    </AnimatePresence>
   );
-};
-
-export default LogoIntro;
+}
