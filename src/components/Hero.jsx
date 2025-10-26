@@ -13,6 +13,7 @@ export default function Hero() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Fade and scale based on scroll
   const opacity = Math.max(1 - scrollY / 300, 0);
   const scale = Math.max(1 - scrollY / 1000, 0.85);
 
@@ -23,8 +24,6 @@ export default function Hero() {
         background: "linear-gradient(to top, #000010, #031531, #0a0a23)",
         backgroundSize: "600% 600%",
         animation: "gradientShift 25s ease infinite",
-        opacity,
-        transition: "opacity 0.02s ease-in-out",
       }}
     >
       {/* RippleGrid background */}
@@ -35,23 +34,29 @@ export default function Hero() {
           rippleIntensity={0.05}
           gridSize={10}
           gridThickness={15}
-          mouseInteraction={true}         // cursor effect restored
+          mouseInteraction={true}         
           mouseInteractionRadius={1.2}
           glowIntensity={0.1}
           opacity={0.3}
-          forceRender={true}              // ensures it shows on initial load
+          forceRender={true}             
         />
       </div>
 
       {/* Hero content */}
       <Parallax speed={-20}>
-        <div className="text-center max-w-2xl z-10">
+        <div
+          className="text-center max-w-2xl z-10"
+          style={{
+            opacity: opacity,
+            transform: `scale(${scale})`,
+            transition: "opacity 0.05s ease, transform 0.05s ease",
+          }}
+        >
           <motion.h1
             initial={{ y: -50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 1 }}
             className="text-4xl md:text-6xl font-orbitron font-bold"
-            style={{ transform: `scale(${scale})` }}
           >
             Hi, I’m Gideon
           </motion.h1>
@@ -61,12 +66,10 @@ export default function Hero() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.5, duration: 1 }}
             className="mt-4 text-lg md:text-xl text-gray-300 font-sans"
-            style={{ transform: `scale(${scale})` }}
           >
             A passionate Full‑Stack Developer building beautiful web experiences.
           </motion.p>
 
-          {/* Liquid-glass button */}
           <motion.a
             href="#projects"
             whileHover={{ scale: 1.1 }}
