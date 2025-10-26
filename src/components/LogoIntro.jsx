@@ -3,17 +3,27 @@ import React, { useEffect, useState } from "react";
 const LogoIntro = ({ onComplete }) => {
   const [explode, setExplode] = useState(false);
   const [done, setDone] = useState(false);
+  const [particles, setParticles] = useState([]);
 
   useEffect(() => {
-    // Cube spins for 3s, then starts a dark explosion that fades smoothly
+    // Spin for 3s, then trigger explosion
     const spinTimer = setTimeout(() => {
       setExplode(true);
 
-      // Explosion lasts 2.2s
+      // Create subtle particles
+      const newParticles = Array.from({ length: 18 }).map((_, i) => ({
+        id: i,
+        x: (Math.random() - 0.5) * 200, // random X scatter
+        y: (Math.random() - 0.5) * 200, // random Y scatter
+        delay: Math.random() * 0.3,
+      }));
+      setParticles(newParticles);
+
+      // End intro
       setTimeout(() => {
         setDone(true);
         if (onComplete) onComplete();
-      }, 2200);
+      }, 1600); // smoother, quicker fade
     }, 3000);
 
     return () => clearTimeout(spinTimer);
@@ -21,19 +31,23 @@ const LogoIntro = ({ onComplete }) => {
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex items-center justify-center transition-opacity duration-[1200ms] ${
+      className={`fixed inset-0 z-[9999] flex items-center justify-center transition-opacity duration-[1000ms] ${
         done ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
-      style={{ backgroundColor: "#031531" }}
+      style={{
+        backgroundColor: "#031531",
+        perspective: "1200px",
+        overflow: "hidden",
+      }}
     >
-      {/* ==== 3D Cube ==== */}
+      {/* ==== Spinning Cube ==== */}
       {!done && (
         <div
           className="relative w-16 h-16"
           style={{
             transformStyle: "preserve-3d",
             animation: explode
-              ? "darkExplode 2.2s ease-in-out forwards"
+              ? "darkExplode 1.6s ease-in-out forwards"
               : "spinCube 3s linear infinite",
           }}
         >
@@ -43,10 +57,10 @@ const LogoIntro = ({ onComplete }) => {
               className="absolute w-16 h-16 rounded-xl"
               style={{
                 background:
-                  "linear-gradient(135deg, rgba(3,21,49,0.5), rgba(0,102,255,0.1))",
+                  "linear-gradient(135deg, rgba(3,21,49,0.4), rgba(0,102,255,0.15))",
                 border: "1px solid rgba(0,191,255,0.15)",
                 boxShadow:
-                  "inset 0 0 15px rgba(0,191,255,0.2), 0 0 25px rgba(0,191,255,0.25)",
+                  "inset 0 0 20px rgba(0,191,255,0.25), 0 0 25px rgba(0,191,255,0.25)",
                 transform: [
                   "translateZ(2rem)",
                   "rotateY(180deg) translateZ(2rem)",
@@ -63,34 +77,59 @@ const LogoIntro = ({ onComplete }) => {
         </div>
       )}
 
+      {/* ==== Particle Sparks ==== */}
+      {explode &&
+        particles.map((p) => (
+          <div
+            key={p.id}
+            className="absolute w-[3px] h-[3px] rounded-full bg-[#00bfff] opacity-70"
+            style={{
+              left: "50%",
+              top: "50%",
+              transform: `translate(-50%, -50%)`,
+              animation: `particleMove 1.2s ${p.delay}s ease-out forwards`,
+            }}
+          />
+        ))}
+
       <style>{`
         @keyframes spinCube {
           0% { transform: rotateX(0deg) rotateY(0deg); }
           100% { transform: rotateX(360deg) rotateY(360deg); }
         }
 
-        /* Dark smooth explosion in the same color theme */
         @keyframes darkExplode {
           0% {
             transform: scale3d(1,1,1) rotateX(0deg) rotateY(0deg);
             box-shadow: 0 0 0 rgba(3,21,49,0);
-            background-color: transparent;
+            filter: brightness(1);
           }
           40% {
-            transform: scale3d(3,3,3) rotateX(45deg) rotateY(45deg);
-            box-shadow: 0 0 100px 40px rgba(3,21,49,0.6);
-            background-color: rgba(3,21,49,0.3);
+            transform: scale3d(2,2,2) rotateX(45deg) rotateY(45deg);
+            box-shadow: 0 0 120px 40px rgba(3,21,49,0.6);
+            filter: brightness(1.1);
           }
-          70% {
-            transform: scale3d(6,6,6) rotateX(70deg) rotateY(60deg);
-            box-shadow: 0 0 150px 80px rgba(3,21,49,0.8);
-            background-color: rgba(3,21,49,0.5);
+          80% {
+            transform: scale3d(6,6,6) rotateX(80deg) rotateY(70deg);
+            box-shadow: 0 0 200px 100px rgba(3,21,49,0.9);
+            filter: brightness(1.15);
           }
           100% {
-            transform: scale3d(15,15,15) rotateX(90deg) rotateY(80deg);
+            transform: scale3d(12,12,12) rotateX(100deg) rotateY(90deg);
             opacity: 0;
             box-shadow: 0 0 300px 120px rgba(3,21,49,1);
-            background-color: rgba(3,21,49,1);
+            filter: brightness(1);
+          }
+        }
+
+        @keyframes particleMove {
+          0% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.9;
+          }
+          100% {
+            transform: translate(calc(-50% + var(--x, 0px)), calc(-50% + var(--y, 0px))) scale(0.2);
+            opacity: 0;
           }
         }
       `}</style>
