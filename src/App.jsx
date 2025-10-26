@@ -16,21 +16,19 @@ function App() {
   return (
     
 <div className="w-full overflow-x-hidden text-white">
-      {!introDone && <LogoIntro onComplete={() => setIntroDone(true)} />}
-      {introDone && (
-        <>
-          <Navbar />
-          <Hero />
-          <About />
-          <SampleCarousel />
-          <Skills />
-          <Projects />
-          <Contact />
-          <ThemeToggle />
-          <ContactMe />
-        </>
-      )}
-    </div>
+  {/* {!introDone && <LogoIntro onComplete={() => setIntroDone(true)} />} */}
+  <>
+    <Navbar />
+    <Hero />
+    <About />
+    <SampleCarousel />
+    <Skills />
+    <Projects />
+    <Contact />
+    <ThemeToggle />
+    <ContactMe />
+  </>
+</div>
   );
 }
 
