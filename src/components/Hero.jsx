@@ -27,7 +27,7 @@ export default function Hero() {
       }}
     >
       {/* RippleGrid background */}
-      <div className="absolute inset-0 -z-10">
+      <div className="absolute inset-0 z-0">
         <RippleGrid
           enableRainbow={false}
           gridColor="red"
