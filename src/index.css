@@ -9,4 +9,11 @@
   src: url('./assets/fonts/Azonix.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
+}html, body {
+  background-color: #031531;
+  color: white;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden;
 }
