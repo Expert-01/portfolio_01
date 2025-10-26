@@ -14,7 +14,8 @@ function App() {
   const [introDone, setIntroDone] = useState(false);
 
   return (
-    <div className="w-full overflow-x-hidden bg-red-800">
+    
+<div className="w-full overflow-x-hidden bg-[#031531] min-h-screen text-white">
       {!introDone && <LogoIntro onComplete={() => setIntroDone(true)} />}
       {introDone && (
         <>
