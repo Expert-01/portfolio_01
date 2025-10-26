@@ -6,24 +6,23 @@ const LogoIntro = ({ onComplete }) => {
   const [particles, setParticles] = useState([]);
 
   useEffect(() => {
-    // Spin for 3s, then trigger explosion
     const spinTimer = setTimeout(() => {
       setExplode(true);
 
-      // Create subtle particles
-      const newParticles = Array.from({ length: 18 }).map((_, i) => ({
+      // Generate subtle particles
+      const newParticles = Array.from({ length: 20 }).map((_, i) => ({
         id: i,
-        x: (Math.random() - 0.5) * 200, // random X scatter
-        y: (Math.random() - 0.5) * 200, // random Y scatter
+        x: (Math.random() - 0.5) * 250,
+        y: (Math.random() - 0.5) * 250,
         delay: Math.random() * 0.3,
       }));
       setParticles(newParticles);
 
-      // End intro
+      // End intro after explosion
       setTimeout(() => {
         setDone(true);
         if (onComplete) onComplete();
-      }, 1600); // smoother, quicker fade
+      }, 1800); // slightly shorter for smooth feel
     }, 3000);
 
     return () => clearTimeout(spinTimer);
@@ -32,12 +31,13 @@ const LogoIntro = ({ onComplete }) => {
   return (
     <div
       className={`fixed inset-0 z-[9999] flex items-center justify-center transition-opacity duration-[1000ms] ${
-        done ? "opacity-0 pointer-events-none" : "opacity-100"
+        done ? "opacity-0" : "opacity-100"
       }`}
       style={{
         backgroundColor: "#031531",
         perspective: "1200px",
         overflow: "hidden",
+        pointerEvents: done ? "none" : "auto", // release scroll after intro
       }}
     >
       {/* ==== Spinning Cube ==== */}
@@ -47,7 +47,7 @@ const LogoIntro = ({ onComplete }) => {
           style={{
             transformStyle: "preserve-3d",
             animation: explode
-              ? "darkExplode 1.6s ease-in-out forwards"
+              ? "darkExplode 1.8s ease-in-out forwards"
               : "spinCube 3s linear infinite",
           }}
         >
@@ -87,7 +87,9 @@ const LogoIntro = ({ onComplete }) => {
               left: "50%",
               top: "50%",
               transform: `translate(-50%, -50%)`,
-              animation: `particleMove 1.2s ${p.delay}s ease-out forwards`,
+              animation: `particleMove 1.5s ${p.delay}s ease-out forwards`,
+              "--x": `${p.x}px`,
+              "--y": `${p.y}px`,
             }}
           />
         ))}
@@ -105,12 +107,12 @@ const LogoIntro = ({ onComplete }) => {
             filter: brightness(1);
           }
           40% {
-            transform: scale3d(2,2,2) rotateX(45deg) rotateY(45deg);
+            transform: scale3d(2.5,2.5,2.5) rotateX(45deg) rotateY(45deg);
             box-shadow: 0 0 120px 40px rgba(3,21,49,0.6);
             filter: brightness(1.1);
           }
           80% {
-            transform: scale3d(6,6,6) rotateX(80deg) rotateY(70deg);
+            transform: scale3d(5.5,5.5,5.5) rotateX(80deg) rotateY(70deg);
             box-shadow: 0 0 200px 100px rgba(3,21,49,0.9);
             filter: brightness(1.15);
           }
@@ -128,7 +130,7 @@ const LogoIntro = ({ onComplete }) => {
             opacity: 0.9;
           }
           100% {
-            transform: translate(calc(-50% + var(--x, 0px)), calc(-50% + var(--y, 0px))) scale(0.2);
+            transform: translate(calc(-50% + var(--x,0px)), calc(-50% + var(--y,0px))) scale(0.2);
             opacity: 0;
           }
         }
