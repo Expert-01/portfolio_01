@@ -1,126 +1,122 @@
-/*import React from "react";
-import { Slider } from "react-slick";
+import { useRef } from "react";
+import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const projects = [
-  // Add your project data here
-  // Example:
-  // {-
-  //   title: "Project Title",
-  //   description: "Project Description",
-  //   image: "path/to/image.jpg",
-  //   link: "https://project-link.com"
-  // }
-{  title: 'Crypto Investment Site',
-  description: 'A secure broker platform built with Node.js, PostgreSQL, and Express.',
-  image: 'path/to/crypto-investment-site.jpg',
-  live: 'https://www.nexa-exchange.com',
-  github: 'https://github.com/yourusername/crypto-investment-site'
-},
-{  title: 'Campus Buddy',
-  description: 'A platform connecting students with campus resources.',
-  image: 'path/to/campus-buddy.jpg',
-  live: 'https://campus-buddy.com',
-  github: 'https://github.com/yourusername/campus-buddy'
-}
+  {
+    title: "Campus Copilot",
+    desc: "Your AI-powered academic and financial assistant for students.",
+    tech: ["React", "Express", "Supabase"],
+    link: "#",
+  },
+  {
+    title: "Crypto Broker",
+    desc: "A secure crypto investment platform with manual admin approvals.",
+    tech: ["Node.js", "PostgreSQL", "Tailwind"],
+    link: "#",
+  },
+  {
+    title: "Smart Expense Tracker",
+    desc: "Track and manage your spending dynamically with custom limits.",
+    tech: ["React", "Chart.js", "Supabase"],
+    link: "#",
+  },
+  {
+    title: "Timetable Reminder",
+    desc: "A smart planner that syncs your timetable with reminders.",
+    tech: ["Express", "React", "PostgreSQL"],
+    link: "#",
+  },
 ];
 
-const ProjectCarousel = () => {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: true,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    pauseOnHover: true,
+export default function ProjectsCarousel() {
+  const scrollRef = useRef(null);
+
+  const scroll = (direction) => {
+    if (!scrollRef.current) return;
+    const { scrollLeft, clientWidth } = scrollRef.current;
+    const scrollAmount = clientWidth * 0.8;
+    scrollRef.current.scrollTo({
+      left: direction === "left" ? scrollLeft - scrollAmount : scrollLeft + scrollAmount,
+      behavior: "smooth",
+    });
   };
 
   return (
-    <div className="my-20 px-4 md:px-20">
-      <Slider {...settings}>
-        {projects.map((project, index) => (
-          <div key={index} className="p-4">
-            <img src={project.image} alt={project.title} className="w-full h-auto rounded-lg" />
-            <h3 className="text-xl font-semibold mt-2">{project.title}</h3>
-            <p className="text-gray-600">{project.description}</p>
-            <div className="mt-4">
-              <a href={project.live} className="text-blue-500 hover:underline">View Live</a>
-              <span className="mx-2">|</span>
-              <a href={project.github} className="text-blue-500 hover:underline">View Code</a>
-            </div>
-          </div>
-        ))}
-      </Slider>
-    </div>
+    <section className="relative w-full py-16 overflow-hidden bg-[#031531] text-white">
+      {/* Ripple grid background */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="ripple-grid opacity-20"></div>
+      </div>
+
+      {/* Carousel */}
+      <div className="relative z-10 flex items-center">
+        <button
+          onClick={() => scroll("left")}
+          className="p-3 mx-2 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm"
+        >
+          <ChevronLeft size={20} />
+        </button>
+
+        <div
+          ref={scrollRef}
+          className="flex gap-6 overflow-x-scroll no-scrollbar scroll-smooth snap-x snap-mandatory px-4"
+        >
+          {projects.map((project, i) => (
+            <motion.div
+              key={i}
+              className="min-w-[300px] md:min-w-[350px] bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-6 snap-center"
+              whileHover={{ scale: 1.05 }}
+            >
+              <h3 className="text-xl font-semibold mb-2 text-blue-300">{project.title}</h3>
+              <p className="text-sm text-gray-300 mb-4">{project.desc}</p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {project.tech.map((t, idx) => (
+                  <span
+                    key={idx}
+                    className="text-xs bg-white/10 px-2 py-1 rounded-md border border-white/10"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+              <a
+                href={project.link}
+                className="inline-block mt-auto text-sm font-medium text-blue-400 hover:text-blue-300"
+              >
+                View Project →
+              </a>
+            </motion.div>
+          ))}
+        </div>
+
+        <button
+          onClick={() => scroll("right")}
+          className="p-3 mx-2 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm"
+        >
+          <ChevronRight size={20} />
+        </button>
+      </div>
+
+      {/* Ripple Grid CSS */}
+      <style jsx>{`
+        .ripple-grid {
+          position: absolute;
+          width: 200%;
+          height: 200%;
+          background: radial-gradient(circle, rgba(0, 122, 255, 0.15) 1px, transparent 1px);
+          background-size: 40px 40px;
+          animation: rippleMove 8s linear infinite;
+        }
+        @keyframes rippleMove {
+          from {
+            transform: translate(0, 0);
+          }
+          to {
+            transform: translate(-40px, -40px);
+          }
+        }
+      `}</style>
+    </section>
   );
-};
-
-export default ProjectCarousel;*/
-import React from "react";
-import Slider from "react-slick";
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import projectImage from '../assets/crypto_site.png'; // Example image import, replace with actual images
-
-const projects = [
-  // Add your project data here
-  // Example:
-  // {
-  //   title: "Project Title",
-  //   description: "Project Description",
-  //   image: "path/to/image.jpg",
-  //   link: "https://project-link.com"
-  // }
-{  title: 'Crypto Investment Site',
-  description: 'A secure broker platform built with Node.js, PostgreSQL, and Express.',
-  image: projectImage,
-  live: 'https://',
-  github: 'https://github.com/yourusername/crypto-investment-site'
-},
-{  title: 'Campus Buddy',
-  description: 'A platform connecting students with campus resources.',
-  image: 'path/to/campus-buddy.jpg',
-  live: 'https://campus-buddy.com',
-  github: 'https://github.com/yourusername/campus-buddy'
 }
-];
-
-const SampleCarousel = () => {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: true,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    pauseOnHover: true,
-  };
-
-
-  return (
-    <div className="my-20 px-4 md:px-20">
-      <Slider {...settings}>
-        {projects.map((project, index) => (
-          <div key={index} className="p-4">
-            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02]">
-            <img src={project.image} alt={project.title} className="w-full h-auto rounded-lg" />
-            <h3 className="text-xl font-semibold mt-2">{project.title}</h3>
-            <p className="text-gray-600">{project.description}</p>
-            <div className="mt-4">
-              <a href={project.live} className="bg-gray-800 text-white py-2 px-4 rounded hover:bg-gray-700">View Live</a>
-              <span className="mx-2">{" "}</span>
-              <a href={project.github} className="bg-blue-800 text-white py-2 px-4 rounded hover:bg-blue-700">View Code</a>
-            </div>
-          </div>
-          </div>
-        ))}
-      </Slider>
-    </div>
-  );
-};
-
-export default SampleCarousel;
