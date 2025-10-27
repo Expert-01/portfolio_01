@@ -13,7 +13,7 @@ const projects = [
     title: "Crypto Broker",
     desc: "A secure crypto investment platform with manual admin approvals.",
     tech: ["Node.js", "PostgreSQL", "Tailwind"],
-    link: "#",
+    link: "https://www.nexa-exchange.com",
   },
   {
     title: "Smart Expense Tracker",
