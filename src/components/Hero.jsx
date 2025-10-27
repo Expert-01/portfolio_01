@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Typewriter } from "react-simple-typewriter";
 import { Parallax } from "react-scroll-parallax";
+import { User } from "react-feather"; // profile icon
 import RippleGrid from "./RippleGrid";
 
 export default function Hero() {
@@ -18,7 +19,7 @@ export default function Hero() {
 
   return (
     <section
-      className="min-h-screen flex items-center justify-center md:justify-start px-6 md:px-24 text-white relative overflow-hidden"
+      className="min-h-screen flex flex-col md:flex-row items-center justify-center md:justify-between px-6 md:px-24 text-white relative overflow-hidden"
       style={{
         background: "linear-gradient(to top, #000010, #031531, #0a0a23)",
         backgroundSize: "600% 600%",
@@ -41,12 +42,12 @@ export default function Hero() {
         />
       </div>
 
-      {/* Hero content */}
+      {/* Left content */}
       <Parallax speed={-20}>
         <div
           className="max-w-2xl z-10 text-center md:text-left"
           style={{
-            opacity: opacity,
+            opacity,
             transform: `scale(${scale})`,
             transition: "opacity 0.05s ease, transform 0.05s ease",
           }}
@@ -102,12 +103,21 @@ export default function Hero() {
         </div>
       </Parallax>
 
+      {/* Right developer profile (desktop only) */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8, x: 100 }}
+        animate={{ opacity: 1, scale: 1, x: 0 }}
+        transition={{ delay: 1, duration: 1 }}
+        className="hidden md:flex items-center justify-center w-[320px] h-[320px] rounded-full bg-gradient-to-br from-cyan-500/30 to-blue-800/30 shadow-[0_0_30px_rgba(0,150,255,0.4)] z-10"
+      >
+        <User size={120} className="text-cyan-300" />
+      </motion.div>
+
       {/* Scroll indicator */}
       <p className="absolute bottom-10 animate-bounce text-gray-400 text-sm md:left-24">
         Scroll Down
       </p>
 
-      {/* Gradient animation */}
       <style>{`
         @keyframes gradientShift {
           0% { background-position:0% 50%; }
