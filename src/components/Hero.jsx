@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Typewriter } from "react-simple-typewriter";
 import { Parallax } from "react-scroll-parallax";
-import { User } from "react-feather"; // profile icon
+import { User } from "lucide-react";
 import RippleGrid from "./RippleGrid";
 
 export default function Hero() {
@@ -42,12 +42,12 @@ export default function Hero() {
         />
       </div>
 
-      {/* Left content */}
+      {/* Left - Hero content */}
       <Parallax speed={-20}>
         <div
           className="max-w-2xl z-10 text-center md:text-left"
           style={{
-            opacity,
+            opacity: opacity,
             transform: `scale(${scale})`,
             transition: "opacity 0.05s ease, transform 0.05s ease",
           }}
@@ -103,14 +103,16 @@ export default function Hero() {
         </div>
       </Parallax>
 
-      {/* Right developer profile (desktop only) */}
+      {/* Right - Profile icon (desktop only) */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.8, x: 100 }}
-        animate={{ opacity: 1, scale: 1, x: 0 }}
-        transition={{ delay: 1, duration: 1 }}
-        className="hidden md:flex items-center justify-center w-[320px] h-[320px] rounded-full bg-gradient-to-br from-cyan-500/30 to-blue-800/30 shadow-[0_0_30px_rgba(0,150,255,0.4)] z-10"
+        initial={{ opacity: 0, x: 100 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.8, duration: 1 }}
+        className="hidden md:flex items-center justify-center z-10"
       >
-        <User size={120} className="text-cyan-300" />
+        <div className="w-64 h-64 flex items-center justify-center rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-700/20 border border-cyan-500/40 shadow-[0_0_30px_rgba(0,200,255,0.3)]">
+          <User size={120} strokeWidth={1.5} className="text-cyan-400" />
+        </div>
       </motion.div>
 
       {/* Scroll indicator */}
@@ -118,6 +120,7 @@ export default function Hero() {
         Scroll Down
       </p>
 
+      {/* Gradient animation */}
       <style>{`
         @keyframes gradientShift {
           0% { background-position:0% 50%; }
