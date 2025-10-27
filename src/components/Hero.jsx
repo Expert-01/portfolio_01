@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Typewriter } from "react-simple-typewriter";
 import { Parallax } from "react-scroll-parallax";
-import RippleGrid from './RippleGrid';
+import RippleGrid from "./RippleGrid";
 
 export default function Hero() {
   const [scrollY, setScrollY] = useState(0);
@@ -13,13 +13,12 @@ export default function Hero() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Fade and scale based on scroll
   const opacity = Math.max(1 - scrollY / 300, 0);
   const scale = Math.max(1 - scrollY / 1000, 0.85);
 
   return (
     <section
-      className="min-h-screen flex items-center justify-center px-6 text-white relative overflow-hidden"
+      className="min-h-screen flex items-center justify-center md:justify-start px-6 md:px-24 text-white relative overflow-hidden"
       style={{
         background: "linear-gradient(to top, #000010, #031531, #0a0a23)",
         backgroundSize: "600% 600%",
@@ -34,18 +33,18 @@ export default function Hero() {
           rippleIntensity={0.05}
           gridSize={10}
           gridThickness={15}
-          mouseInteraction={true}         
+          mouseInteraction={true}
           mouseInteractionRadius={1.2}
           glowIntensity={0.1}
           opacity={0.3}
-          forceRender={true}             
+          forceRender={true}
         />
       </div>
 
       {/* Hero content */}
       <Parallax speed={-20}>
         <div
-          className="text-center max-w-2xl z-10"
+          className="max-w-2xl z-10 text-center md:text-left"
           style={{
             opacity: opacity,
             transform: `scale(${scale})`,
@@ -65,9 +64,9 @@ export default function Hero() {
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.5, duration: 1 }}
-            className="mt-4 text-lg md:text-xl text-gray-300 font-sans"
+            className="mt-4 text-lg md:text-xl text-gray-300 font-sans max-w-lg"
           >
-            A passionate Full‑Stack Developer building beautiful web experiences.
+            A passionate Full-Stack Developer building beautiful web experiences.
           </motion.p>
 
           <motion.a
@@ -104,7 +103,7 @@ export default function Hero() {
       </Parallax>
 
       {/* Scroll indicator */}
-      <p className="absolute bottom-10 animate-bounce text-gray-400 text-sm">
+      <p className="absolute bottom-10 animate-bounce text-gray-400 text-sm md:left-24">
         Scroll Down
       </p>
 
